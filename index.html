@@ -94,6 +94,9 @@ tbody tr:hover{background:#f7faff}
 .tag.ok{background:var(--green-pale);color:var(--green)}
 .tag.gray{background:#eef1f5;color:var(--muted)}
 .tbl-wrap{max-height:320px;overflow:auto;border:1px solid var(--line);border-radius:6px}
+.pager{display:flex;align-items:center;justify-content:flex-end;gap:10px;margin:8px 0 2px;font-size:12px;color:var(--muted)}
+.pager select{width:auto;margin-left:4px;padding:3px 6px}
+.pager .btn{padding:3px 10px}
 .grid2{display:grid;grid-template-columns:1fr 1fr;gap:11px}
 .box{border:1px solid var(--line);border-radius:6px;padding:11px 13px;background:#fff}
 .box h4{font-size:12px;color:var(--blue-dk);margin-bottom:7px;display:flex;align-items:center;justify-content:space-between}
@@ -459,6 +462,7 @@ p.hint{font-size:11.5px;color:var(--muted);margin:-2px 0 10px}
           <tbody id="scBody"></tbody>
         </table>
       </div>
+      <div id="scPager"></div>
       <p class="note">分院到检B2C = 预约单中有记录，且命中客户匹配规则，且满足本区域客群字段规则（客群来源、本次到检金额、本次加项金额，以及新增的客户标签）。没有预约单的客户不进入本页。演示中何倩满足字段规则且检线为北京建国门，但预约单没有她，因此不出现。主动申请不看预约单，从名单导入，可在行内上传报告等材料。推送解读时选择日期和整点时段，预约日等于登录日（2026-10-21）的客户才会进入「高客解读列表」。</p>
     </div>
     <div id="p0Card" style="display:none">
@@ -508,6 +512,7 @@ p.hint{font-size:11.5px;color:var(--muted);margin:-2px 0 10px}
         <tbody id="qBody"></tbody>
       </table>
     </div>
+    <div id="qPager"></div>
     <p class="note">「高客解读列表」的数据来自「客户筛选与推送」里已经选定预约、且预约日期为登录当日的客户，并继续按本人检线权限过滤。未推送或预约在其他日期的客户不会出现在这里。</p>
   </div>
 
@@ -674,6 +679,7 @@ p.hint{font-size:11.5px;color:var(--muted);margin:-2px 0 10px}
         <tbody id="callBody"></tbody>
       </table>
     </div>
+    <div id="callPager"></div>
     <p class="note">复用现网得助外呼线路，租户按门诊中心隔离。接通后自动计时，挂断写入外呼记录并回填「添加解读记录」的解读用时。</p>
   </div>
 
@@ -694,6 +700,7 @@ p.hint{font-size:11.5px;color:var(--muted);margin:-2px 0 10px}
         <tbody id="logBody"></tbody>
       </table>
     </div>
+    <div id="logPager"></div>
   </div>
 
 
@@ -782,6 +789,7 @@ p.hint{font-size:11.5px;color:var(--muted);margin:-2px 0 10px}
         <tbody id="adBody"></tbody>
       </table>
     </div>
+    <div id="adPager"></div>
     <p class="note">规则圈定客户的成交计入 B2C 转化率。主动申请客源单独计入主动转化率，不并进 B2C。专科转诊两种口径都不计转化。本表不再展示转化完成和达标状态。</p>
   </div>
 
@@ -806,6 +814,7 @@ p.hint{font-size:11.5px;color:var(--muted);margin:-2px 0 10px}
       <th>序号</th><th>检线ID</th><th>检线名称</th><th>中心ID</th><th>关联的门诊中心</th><th>AI助手配置</th><th>AI解读模版</th><th>合规护栏</th><th>操作人</th><th>操作时间</th></tr></thead>
       <tbody id="aiBody"></tbody>
     </table></div>
+    <div id="aiPager"></div>
     <p class="note">AI助手配置、合规护栏变更后，医生在「报告解读作业」刷新即生效。AI解读模版的版本下拉为 2 期开发内容，本次仅展示选择。</p>
   </div>
 
@@ -824,6 +833,7 @@ p.hint{font-size:11.5px;color:var(--muted);margin:-2px 0 10px}
       </tr></thead>
       <tbody id="mBody"></tbody>
     </table></div>
+    <div id="mPager"></div>
     <p class="note">「不承接，转专科」用于重大阳性客户，配置后不再分进门诊转化。</p>
   </div>
 
@@ -843,6 +853,7 @@ p.hint{font-size:11.5px;color:var(--muted);margin:-2px 0 10px}
       <thead><tr><th>规则ID</th><th>触发指标 / 阈值</th><th>检查项 miscode</th><th>推荐类型</th><th>推荐内容 / 商品URL</th><th>参考价</th><th>话术要点</th><th>可售范围</th><th>状态</th><th>操作</th></tr></thead>
       <tbody id="rBody"></tbody>
     </table></div>
+    <div id="rPager"></div>
     <p class="note">需填写检查项 miscode 与商品中心对齐。推荐内容可附带商品 URL，作业端按链接打开商品详情。「转诊（禁推荐）」命中时，不展示商品卡片。</p>
   </div>
 
@@ -862,6 +873,7 @@ p.hint{font-size:11.5px;color:var(--muted);margin:-2px 0 10px}
       <thead><tr><th>指标</th><th>单位</th><th>常规参考区间</th><th>功能医学最佳值</th><th>所属主线</th><th>参与分流</th><th>参与推荐</th><th>操作</th></tr></thead>
       <tbody id="dBody"></tbody>
     </table></div>
+    <div id="dPager"></div>
     <p class="note">「参与分流」的指标可作为客户匹配规则的条件；「参与推荐」的指标可作为推荐规则的触发项。两项分开控制。指标名称也会进入「计算指标」的指标池。</p>
   </div>
 
@@ -877,6 +889,7 @@ p.hint{font-size:11.5px;color:var(--muted);margin:-2px 0 10px}
       <thead><tr><th>编号</th><th>指标名称</th><th>计算公式</th><th>入公式指标</th><th>常规参考</th><th>最佳</th><th>状态</th><th>操作</th></tr></thead>
       <tbody id="fBody"></tbody>
     </table></div>
+    <div id="fPager"></div>
     <p class="note">停用的计算指标不参与判读。修改公式或阈值后，报告侧栏按新口径展示。只有计算结果超出参考时，才会进入「指标判读」和「历年指标」。</p>
   </div>
 
@@ -894,6 +907,7 @@ p.hint{font-size:11.5px;color:var(--muted);margin:-2px 0 10px}
       <thead><tr><th>人员姓名</th><th>用户账号</th><th>角色名称</th><th>KEY</th><th>已分配检线</th><th>最新修改时间</th><th>操作</th></tr></thead>
       <tbody id="pmBody"></tbody>
     </table></div>
+    <div id="pmPager"></div>
     <p class="note">当前演示登录人是张明。改他的检线并保存后，回到「高客解读列表」，列表会按新权限立即收窄。</p>
   </div>
 
@@ -963,6 +977,7 @@ p.hint{font-size:11.5px;color:var(--muted);margin:-2px 0 10px}
       <thead><tr><th>时间</th><th>配置项</th><th>变更内容</th><th>操作人</th><th>生效时间</th><th>影响范围</th></tr></thead>
       <tbody id="lBody"></tbody>
     </table></div>
+    <div id="lPager"></div>
   </div>
 
   <div class="statusbar">
@@ -1380,6 +1395,45 @@ function toast(msg,type){
   setTimeout(()=>d.remove(),3000);
 }
 
+/* ---------------- 列表分页：默认 50，可选 200 / 500。解读与分源转化、报告目录不分页 ---------------- */
+const PAGE={};
+function pageSt(key){
+  if(!PAGE[key]) PAGE[key]={page:1,size:50,sig:''};
+  return PAGE[key];
+}
+function pageKeep(key, sig){
+  const st=pageSt(key);
+  if(st.sig!==sig){ st.sig=sig; st.page=1; }
+  return st;
+}
+function paintPage(key, items, emptyHtml){
+  const st=pageSt(key);
+  const size=st.size||50;
+  const total=items.length;
+  const pages=Math.max(1, Math.ceil(total/size));
+  if(st.page>pages) st.page=pages;
+  if(st.page<1) st.page=1;
+  const start=(st.page-1)*size;
+  const body=total?items.slice(start, start+size).join(''):emptyHtml;
+  const pager=`<div class="pager"><span>共 ${total} 条</span><label>每页<select onchange="setPageSize('${key}',this.value)"><option value="50" ${size===50?'selected':''}>50</option><option value="200" ${size===200?'selected':''}>200</option><option value="500" ${size===500?'selected':''}>500</option></select></label><button type="button" class="btn ghost sm" ${st.page<=1?'disabled':''} onclick="turnPage('${key}',-1)">上一页</button><span>${st.page} / ${pages}</span><button type="button" class="btn ghost sm" ${st.page>=pages?'disabled':''} onclick="turnPage('${key}',1)">下一页</button></div>`;
+  return {body, pager};
+}
+function turnPage(key, d){
+  pageSt(key).page+=d;
+  (PAGE_GO[key]||function(){})();
+}
+function setPageSize(key, size){
+  const st=pageSt(key);
+  st.size=+size||50;
+  st.page=1;
+  (PAGE_GO[key]||function(){})();
+}
+const PAGE_GO={
+  sc:()=>renderScreen(), q:()=>renderQueue(), call:()=>renderCalls(), log:()=>renderLogs(),
+  ad:()=>renderAddon(), ai:()=>renderAi(), m:()=>renderMatch(), r:()=>renderRule(),
+  d:()=>renderDict(), f:()=>renderRatio(), pm:()=>renderPerm(), l:()=>renderLog()
+};
+
 /* ---------------- 01 分流 ---------------- */
 function todayBooked(){
   const lines=myLines();
@@ -1389,7 +1443,8 @@ function renderQueue(){
   const t=fTier.value,p=+fPos.value,o=fOrg.value;
   const lines=myLines();
   const rows=todayBooked().filter(r=>(!t||r.tier===t)&&(r.pos>=p)&&(!o||r.org===o));
-  qBody.innerHTML=rows.map(r=>`<tr>
+  pageKeep('q', [t,p,o].join('|'));
+  const htmls=rows.map(r=>`<tr>
     <td><b>${r.name}</b></td><td>${r.sex} / ${r.age}</td><td>${r.card}</td><td>${r.org}</td>
     <td>${r.seg}</td>
     <td>${r.source==='apply'?'<span class="tag warn">主动申请</span>':'<span class="tag">规则圈定</span>'}</td>
@@ -1397,7 +1452,9 @@ function renderQueue(){
     <td><span class="tag ${r.pos>=5?'warn':''}">${r.pos} 项</span></td>
     <td style="font-size:11px;color:var(--muted)">${r.rule}</td>
     <td>${r.ikangReady===false?'<button class="btn ghost sm" disabled>报告未出</button>':'<button class="btn ghost sm" onclick="jump('+r.id+')">查看报告</button>'}</td>
-  </tr>`).join('')||'<tr><td colspan="10">登录当日还没有已预约客户</td></tr>';
+  </tr>`);
+  const pg=paintPage('q', htmls, '<tr><td colspan="10">登录当日还没有已预约客户</td></tr>');
+  qBody.innerHTML=pg.body; qPager.innerHTML=pg.pager;
   qCnt.textContent=rows.length;
   lineBan.textContent='登录日 '+LOGIN_DAY+'。可见检线：'+(lines.join('、')||'无')+'。只显示「客户筛选与推送」里预约到这一天的客户。';
 }
@@ -1727,8 +1784,10 @@ function endCall(){
   renderCalls(); startTimer();
 }
 function renderCalls(){
-  callBody.innerHTML=CALLS.map(c=>`<tr><td>${c.t}</td><td>${c.name}</td><td>${c.card}</td><td>${c.tel}</td>
-    <td><span class="tag ok">${c.res}</span></td><td>${c.dur}</td><td>${c.op}</td><td>${c.note}</td></tr>`).join('');
+  const htmls=CALLS.map(c=>`<tr><td>${c.t}</td><td>${c.name}</td><td>${c.card}</td><td>${c.tel}</td>
+    <td><span class="tag ok">${c.res}</span></td><td>${c.dur}</td><td>${c.op}</td><td>${c.note}</td></tr>`);
+  const pg=paintPage('call', htmls, '<tr><td colspan="8">暂无外呼记录</td></tr>');
+  callBody.innerHTML=pg.body; callPager.innerHTML=pg.pager;
 }
 
 /* ---------------- 07 记录查询 ---------------- */
@@ -1738,10 +1797,13 @@ function filtered(){
 }
 function renderLogs(){
   const rows=filtered();
+  pageKeep('log', [qName.value,qCard.value,qWay.value].join('|'));
   logN.textContent=rows.length;
-  logBody.innerHTML=rows.map((r,i)=>`<tr><td>${r.name}</td><td>${r.card}</td><td>${r.proj}</td><td>${r.tel}</td>
+  const htmls=rows.map((r,i)=>`<tr><td>${r.name}</td><td>${r.card}</td><td>${r.proj}</td><td>${r.tel}</td>
     <td><span class="tag ok">${r.res}</span></td><td>${r.dur}</td><td>${r.way}</td><td>${r.sat}</td><td>${r.op}</td>
-    <td><button class="btn ghost sm" onclick="showLog(${i})">查看详情</button></td></tr>`).join('');
+    <td><button class="btn ghost sm" onclick="showLog(${i})">查看详情</button></td></tr>`);
+  const pg=paintPage('log', htmls, '<tr><td colspan="10">无匹配记录</td></tr>');
+  logBody.innerHTML=pg.body; logPager.innerHTML=pg.pager;
 }
 function showLog(i){
   const r=filtered()[i];
@@ -1813,7 +1875,8 @@ function renderScreen(){
   if(!document.getElementById('scBody')) return;
   const rows=screenRows();
   scCnt.textContent=rows.length;
-  scBody.innerHTML=rows.map(r=>{
+  pageKeep('sc', [(document.getElementById('scSrc')?scSrc.value:''),(document.getElementById('scSeg')?scSeg.value:'')].join('|'));
+  const htmls=rows.map(r=>{
     const od=orderOf(r);
     const ap=r.appt?(r.appt.date+' '+r.appt.slot):'<span class="tag gray">未预约</span>';
     const mat=r.source==='apply'
@@ -1830,7 +1893,9 @@ function renderScreen(){
         <button class="btn or sm" onclick="openPush(${r.id})">推送报告解读</button>
       </td>
     </tr>`;
-  }).join('')||'<tr><td colspan="12">当前规则和检线下没有客户</td></tr>';
+  });
+  const pg=paintPage('sc', htmls, '<tr><td colspan="12">当前规则和检线下没有客户</td></tr>');
+  scBody.innerHTML=pg.body; scPager.innerHTML=pg.pager;
 }
 function openCard(id){
   const r=Q.find(x=>x.id===id);
@@ -2285,14 +2350,16 @@ function renderAddon(){
   adRate.textContent=read?pct1(conv/read*100):'—';
   const mix=mixOf(region);
   const max=Math.max(...mix.map(m=>m.c),1);
-  adMixSrc.textContent=(region||'全集团')+' · '+tgPeriod.value;
+  const period=document.getElementById('tgPeriod');
+  adMixSrc.textContent=(region||'全集团')+' · '+(period?period.value:'2026年10月');
   adMix.innerHTML=mix.map(m=>`<div class="hrow"><span>${m.n}</span><div class="pbar"><i class="${m.a?'':'mute'}" style="width:${Math.max(m.c/max*100,m.c?4:0)}%"></i></div><em>${m.c} 件${m.a?' · '+yuan(m.a):' · 不计转化'}</em></div>`).join('');
   adCoach.innerHTML=COACH.length?COACH.map(n=>{
     const d=OPS_DOCS.find(x=>x.name===n);
     const rate=d&&d.read?pct1(d.conv/d.read*100):'—';
     return `<li>${n}${d?' · '+d.region+' · '+d.org+' · B2C '+rate:''}</li>`;
   }).join(''):'<li>暂无</li>';
-  adBody.innerHTML=docs.map(d=>{
+  pageKeep('ad', [region,line,only].join('|'));
+  const htmls=docs.map(d=>{
     const rate=d.read?d.conv/d.read*100:0;
     const act=d.actRead?d.actConv/d.actRead*100:0;
     const avg=d.items?Math.round(d.amt/d.items):0;
@@ -2306,7 +2373,9 @@ function renderAddon(){
       <td style="color:${d.mom>=0?'var(--green)':'var(--red)'}">${d.mom>=0?'+':''}${d.mom.toFixed(1)}%</td>
       <td>${inList?'<span class="tag gray">已在名单</span>':`<button class="btn ghost sm" onclick="addCoach('${d.name}')">加入辅导</button>`}</td>
     </tr>`;
-  }).join('') || '<tr><td colspan="14">无匹配医生</td></tr>';
+  });
+  const pg=paintPage('ad', htmls, '<tr><td colspan="14">无匹配医生</td></tr>');
+  adBody.innerHTML=pg.body; adPager.innerHTML=pg.pager;
 }
 
 
@@ -2404,20 +2473,25 @@ function addBan(){
 function renderAi(){
   const lid=aiLid.value.trim(), i=aiId.value.trim(), n=aiNm.value.trim(), t=aiTp.value;
   const rows=AICFG.filter(a=>(!lid||a.lid.includes(lid))&&(!i||a.id.includes(i))&&(!n||a.nm.includes(n))&&(!t||a.tp===t));
+  pageKeep('ai', [lid,i,n,t].join('|'));
   const tplOpt=v=>['v2.0','v2.1'].map(x=>`<option ${v===x?'selected':''}>${x}</option>`).join('');
-  aiBody.innerHTML=rows.map((a,k)=>`<tr>
+  const htmls=rows.map((a,k)=>`<tr>
     <td><input type="checkbox" class="aichk" data-id="${a.id}"></td>
     <td>${k+1}</td><td>${a.lid}</td><td>${a.nm}</td><td>${a.id}</td><td><span class="tag">${a.tp}</span></td>
     <td><label class="tog"><input type="checkbox" ${a.on?'checked':''} onchange="toggleAi('${a.id}',this.checked)"><i></i></label></td>
     <td><select onchange="setAiTpl('${a.id}',this.value)">${tplOpt(a.tpl)}</select><span class="ph2">2期开发内容</span></td>
     <td><label class="tog"><input type="checkbox" ${a.gd?'checked':''} onchange="toggleGd('${a.id}',this.checked)"><i></i></label></td>
-    <td>${a.op}</td><td>${a.t}</td></tr>`).join('');
-  aiOn.textContent=AICFG.filter(a=>a.on).length;
+    <td>${a.op}</td><td>${a.t}</td></tr>`);
+  const pg=paintPage('ai', htmls, '<tr><td colspan="11">无匹配检线</td></tr>');
+  aiBody.innerHTML=pg.body; aiPager.innerHTML=pg.pager;
+  const onEl=document.getElementById('aiOn');
+  if(onEl) onEl.textContent=AICFG.filter(a=>a.on).length;
 }
 function stampNow(){return new Date().toISOString().slice(0,19).replace('T',' ');}
 function toggleAi(id,v){
   const a=AICFG.find(x=>x.id===id); a.on=v; a.t=stampNow();
-  aiOn.textContent=AICFG.filter(x=>x.on).length;
+  const onEl=document.getElementById('aiOn');
+  if(onEl) onEl.textContent=AICFG.filter(x=>x.on).length;
   toast(a.nm+(v?' 已启用AI助手配置':' 已停用AI助手配置'),v?'':'warn');
 }
 function toggleGd(id,v){
@@ -2462,10 +2536,11 @@ function syncMdx(keep){
 function renderMatch(){
   MATCH.sort((a,b)=>a.pri-b.pri);
   const dash='<span style="color:var(--muted)">—</span>';
-  mBody.innerHTML=XUANHU.map((x,i)=>{
+  const htmls=[];
+  XUANHU.forEach((x,i)=>{
     const rules=MATCH.filter(m=>m.dx===x.dx);
     const rows=rules.length?rules:[null];
-    return rows.map(m=>`<tr>
+    htmls.push(...rows.map(m=>`<tr>
       <td>${i+1}</td><td>${x.abn}</td><td>${x.abnNm}</td><td>${x.dx}</td><td>${x.dxNm}</td><td>${x.t}</td>
       ${m?`<td>${String(m.center).includes('不')?'<span class="tag red">'+m.center+'</span>':m.center}</td>
         <td>${m.doc}</td><td><span class="tag gray">${m.scope}</span></td>
@@ -2473,8 +2548,10 @@ function renderMatch(){
         <td><button class="btn ghost sm" onclick="editMatch('${m.id}')">编辑</button></td>`
         :`<td>${dash}</td><td>${dash}</td><td>${dash}</td><td>${dash}</td>
         <td><button class="btn ghost sm" onclick="openMatch('${x.abn}','${x.dx}')">配置规则</button></td>`}
-    </tr>`).join('');
-  }).join('');
+    </tr>`));
+  });
+  const pg=paintPage('m', htmls, '');
+  mBody.innerHTML=pg.body; mPager.innerHTML=pg.pager;
 }
 function openMatch(abn, dx){
   editMatchId=null;
@@ -2518,7 +2595,8 @@ function fillRuleCond(){
 function renderRule(){
   const t=rTp.value;
   const rows=RULE.filter(r=>!t||r.tp===t);
-  rBody.innerHTML=rows.map(r=>{
+  pageKeep('r', t||'');
+  const htmls=rows.map(r=>{
     const link=r.url?`<div style="font-size:11px;margin-top:2px"><a href="${r.url}" target="_blank" style="color:var(--blue)">${r.url}</a></div>`:'';
     return `<tr>
     <td>${r.id}</td><td style="font-size:11.5px;color:var(--muted)">${r.cond}</td>
@@ -2529,7 +2607,9 @@ function renderRule(){
     <td><span class="tag gray">${r.scope}</span></td>
     <td>${r.on?'<span class="tag ok">启用</span>':'<span class="tag gray">停用</span>'}</td>
     <td><button class="btn ghost sm" onclick="editRecRule('${r.id}')">编辑</button></td></tr>`;
-  }).join('');
+  });
+  const pg=paintPage('r', htmls, '<tr><td colspan="10">无匹配规则</td></tr>');
+  rBody.innerHTML=pg.body; rPager.innerHTML=pg.pager;
 }
 function openRule(){
   editRuleId=null;
@@ -2581,13 +2661,16 @@ function resetPrompt(){
 }
 function renderDict(){
   const l=dLine.value;
-  dBody.innerHTML=DICT.filter(d=>!l||d[4]===l).map(d=>`<tr>
+  pageKeep('d', l||'');
+  const htmls=DICT.filter(d=>!l||d[4]===l).map(d=>`<tr>
     <td><b>${d[0]}</b></td><td>${d[1]}</td><td>${d[2]}</td>
     <td style="color:var(--orange);font-weight:700">${d[3]}</td>
     <td><span class="tag">${d[4]}</span></td>
     <td>${d[5]?'<span class="tag ok">是</span>':'<span class="tag gray">否</span>'}</td>
     <td>${d[6]?'<span class="tag ok">是</span>':'<span class="tag gray">否</span>'}</td>
-    <td><button class="btn ghost sm" onclick="editDict('${d[0]}')">编辑</button></td></tr>`).join('');
+    <td><button class="btn ghost sm" onclick="editDict('${d[0]}')">编辑</button></td></tr>`);
+  const pg=paintPage('d', htmls, '<tr><td colspan="8">无匹配指标</td></tr>');
+  dBody.innerHTML=pg.body; dPager.innerHTML=pg.pager;
 }
 function openDict(){
   dictEditName=null;
@@ -2623,14 +2706,16 @@ function saveDict(){
   mdD.classList.remove('on'); renderDict();
 }
 function renderRatio(){
-  fBody.innerHTML=RATIOS.map(r=>`<tr>
+  const htmls=RATIOS.map(r=>`<tr>
     <td>${r.id}</td><td><b>${r.name}</b></td>
     <td style="font-size:11.5px">${r.expr}</td>
     <td>${r.inds.map(n=>'<span class="tag">'+n+'</span>').join(' ')}</td>
     <td>${rangeText(r.lo,r.hi)}</td><td style="color:var(--orange);font-weight:700">${rangeText(r.blo,r.bhi)}</td>
     <td>${r.on?'<span class="tag ok">启用</span>':'<span class="tag gray">停用</span>'}</td>
     <td><button class="btn ghost sm" onclick="editRatio('${r.id}')">编辑</button></td>
-  </tr>`).join('');
+  </tr>`);
+  const pg=paintPage('f', htmls, '<tr><td colspan="8">暂无计算指标</td></tr>');
+  fBody.innerHTML=pg.body; fPager.innerHTML=pg.pager;
 }
 function paintInds(selected){
   const set=new Set(selected||[]);
@@ -2711,7 +2796,9 @@ function confirmBook(){
   toast('已为 '+who.name+' 完成门诊预约 '+no);
 }
 function renderLog(){
-  lBody.innerHTML=CFGLOG.map(l=>`<tr><td>${l[0]}</td><td><span class="tag">${l[1]}</span></td><td>${l[2]}</td><td>${l[3]}</td><td>${l[4]}</td><td>${l[5]}</td></tr>`).join('');
+  const htmls=CFGLOG.map(l=>`<tr><td>${l[0]}</td><td><span class="tag">${l[1]}</span></td><td>${l[2]}</td><td>${l[3]}</td><td>${l[4]}</td><td>${l[5]}</td></tr>`);
+  const pg=paintPage('l', htmls, '<tr><td colspan="6">暂无日志</td></tr>');
+  lBody.innerHTML=pg.body; lPager.innerHTML=pg.pager;
 }
 
 const ALL_LINES=["013 爱康国宾北京总部基地分院VIP部","026 爱康卓悦北京中关村方正国际大厦分院","027 爱康国宾北京中关村方正大厦分院","099 爱康国宾北京磁路口分院","100 爱康国宾北京WA香山公园门诊部","122 北京爱康君安标准生命VVIP部","360 爱康齿科北京日坛分院","北京建国门","北京亦庄","上海五角场","南京新街口","杭州黄龙","成都天府","深圳福田","武汉光谷"];
@@ -2726,14 +2813,17 @@ let permEdit=null, draftLines=[];
 function renderPerm(){
   const n=pmName.value.trim(), a=pmAcc.value.trim();
   const rows=PERMS.filter(p=>(!n||p.name.includes(n))&&(!a||p.account.includes(a)));
+  pageKeep('pm', [n,a].join('|'));
   pmN.textContent=rows.length;
-  pmBody.innerHTML=rows.map(p=>`<tr>
+  const htmls=rows.map(p=>`<tr>
     <td>${p.name}${p.name==='张明'?' <span class="tag">当前登录</span>':''}</td>
     <td>${p.account}</td><td>${p.role}</td><td>${p.key}</td>
     <td style="font-size:11.5px">${p.lines.length?p.lines.join('、'):'—'}</td>
     <td>${p.at}</td>
     <td><button class="btn ghost sm" onclick="openPerm('${p.name}')">分配检线</button></td>
-  </tr>`).join('')||'<tr><td colspan="7">无匹配人员</td></tr>';
+  </tr>`);
+  const pg=paintPage('pm', htmls, '<tr><td colspan="7">无匹配人员</td></tr>');
+  pmBody.innerHTML=pg.body; pmPager.innerHTML=pg.pager;
 }
 function openPerm(name){
   const p=PERMS.find(x=>x.name===name);

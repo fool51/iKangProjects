@@ -64,6 +64,7 @@ h3.sec::before{content:"";width:3px;height:13px;background:var(--orange);border-
 select,input[type=text],input[type=tel],textarea{font-family:inherit;font-size:12px;padding:4px 8px;border:1px solid var(--line);border-radius:4px;background:#fff;color:var(--text)}
 textarea{width:100%;min-height:70px;resize:vertical}
 .btn{font-family:inherit;font-size:12px;font-weight:700;padding:6px 14px;border:none;border-radius:5px;cursor:pointer;background:var(--blue);color:#fff}
+.btn:disabled{opacity:.55;cursor:not-allowed}
 .btn:hover{background:var(--blue-dk)}
 .btn.ghost{background:#fff;color:var(--blue);border:1px solid var(--blue)}
 .btn.ghost:hover{background:var(--blue-pale)}
@@ -150,6 +151,9 @@ tbody tr:hover{background:#f7faff}
 .trow .meta b{display:block;font-size:13px;color:var(--blue-dk)}
 .trow .meta em{font-style:normal;font-size:11px;color:var(--muted)}
 .trow .go{font-size:11px;color:var(--blue);font-weight:700;white-space:nowrap}
+.trow.wait{cursor:default}
+.trow.wait:hover{background:transparent}
+.trow.wait .go{color:var(--muted)}
 .sug{border:1px solid var(--line);border-radius:6px;padding:10px 12px;overflow:auto;max-height:560px}
 .sug .n{font-weight:800;color:var(--orange);margin:9px 0 3px}
 
@@ -381,6 +385,7 @@ p.hint{font-size:11.5px;color:var(--muted);margin:-2px 0 10px}
     <button class="wsb on" data-ws="clinic" onclick="setWs('clinic')">报告解读作业</button>
     <button class="wsb" data-ws="ops" onclick="setWs('ops')">目标与绩效</button>
     <button class="wsb" data-ws="rule" onclick="setWs('rule')">解读规则配置</button>
+    <button class="wsb" data-ws="log" onclick="setWs('log')">解读记录查询</button>
     <span class="hint" id="wsHint">医生工作台 · 患者上下文来自 TrakCare</span>
   </div>
 
@@ -418,7 +423,6 @@ p.hint{font-size:11.5px;color:var(--muted);margin:-2px 0 10px}
     <div class="mod" data-p="p4" data-ws="clinic"><span class="ic">04</span>推荐&转化话术</div>
     <div class="mod" data-p="p5" data-ws="clinic"><span class="ic">05</span>添加解读记录</div>
     <div class="mod" data-p="p6" data-ws="clinic"><span class="ic">06</span>电话外呼<span class="sub">跳转至外呼系统</span></div>
-    <div class="mod" data-p="p7" data-ws="clinic"><span class="ic">07</span>解读记录查询</div>
     <div class="mod" data-p="p10" data-ws="ops" style="display:none"><span class="ic">01</span>客群目标设定</div>
     <div class="mod" data-p="p11" data-ws="ops" style="display:none"><span class="ic">02</span>解读与分源转化</div>
     <div class="mod" data-p="p12" data-ws="ops" style="display:none"><span class="ic">03</span>加项与医生转化<span class="ph2">2期开发内容</span></div>
@@ -437,7 +441,7 @@ p.hint{font-size:11.5px;color:var(--muted);margin:-2px 0 10px}
   <div class="pane on" id="p0">
     <div id="p0List">
       <h3 class="sec">客户筛选与推送</h3>
-      <div class="banner">先按客户匹配规则和客群目标设定的字段规则圈出客户，再预约推送。主动申请在本页导入，不并入分院到检B2C，后续单独计为主动转化。</div>
+      <div class="banner">健康咨询师推送解读任务之前，分院到检B2C先取预约单里的客户，再按客户匹配规则和客群字段规则筛选。主动申请在本页导入，不并入分院到检B2C。</div>
       <div class="toolbar">
         <label>来源</label>
         <select id="scSrc" onchange="renderScreen()"><option value="">全部</option><option value="rule">分院到检B2C</option><option value="apply">主动申请</option></select>
@@ -449,13 +453,13 @@ p.hint{font-size:11.5px;color:var(--muted);margin:-2px 0 10px}
       <div class="tbl-wrap">
         <table>
           <thead><tr>
-            <th>客户</th><th>性别/年龄</th><th>客群</th><th>本次检线</th><th>套餐价</th><th>本次加项</th>
-            <th>来源</th><th>预约</th><th>材料</th><th>操作</th>
+            <th>客户</th><th>性别/年龄</th><th>客群</th><th>本次检线</th><th>预约单号</th><th>预约到检</th><th>套餐价</th><th>本次加项</th>
+            <th>来源</th><th>解读预约</th><th>材料</th><th>操作</th>
           </tr></thead>
           <tbody id="scBody"></tbody>
         </table>
       </div>
-      <p class="note">分院到检B2C = 命中客户匹配规则，且满足本区域客群字段规则（客群来源、本次到检金额、本次加项金额，以及新增的客户标签）。主动申请客户从名单导入，可在行内上传报告等材料。推送时选择日期和整点时段，预约日等于登录日（2026-10-21）的客户才会进入「高客解读列表」。</p>
+      <p class="note">分院到检B2C = 预约单中有记录，且命中客户匹配规则，且满足本区域客群字段规则（客群来源、本次到检金额、本次加项金额，以及新增的客户标签）。没有预约单的客户不进入本页。演示中何倩满足字段规则且检线为北京建国门，但预约单没有她，因此不出现。主动申请不看预约单，从名单导入，可在行内上传报告等材料。推送解读时选择日期和整点时段，预约日等于登录日（2026-10-21）的客户才会进入「高客解读列表」。</p>
     </div>
     <div id="p0Card" style="display:none">
       <div class="toolbar">
@@ -703,9 +707,10 @@ p.hint{font-size:11.5px;color:var(--muted);margin:-2px 0 10px}
       <button class="btn ghost" id="tgSave" onclick="saveTarget()">保存</button>
       <button class="btn ghost" id="tgSave" onclick="saveTarget()">编辑</button>
       <button class="btn ghost" id="tgSave" onclick="saveTarget()">推送MIS报告解读屏蔽</button>
+
     </div>
     <div class="seg2" id="tgSegs"></div>
-    <p class="note">解读客群不再填写百分比，也不再设置目标转化百分比。默认规则为客群来源、本次到检金额、本次加项金额；可继续新增字段，枚举值来自客户标签（如活跃客户）。同一字段多条规则按「或」命中，不同字段按「且」同时满足。主动申请已移到「客户筛选与推送」，不在这里配置，也不参与规则圈定。人群提交后仍由区域管理审核，审核通过后推送老系统屏蔽。华北「演示名单命中」按当前登录检线内的演示客户实时计算，其他区域为周期快照。</p>
+    <p class="note">健康咨询师推送解读任务之前，圈定范围先取预约单，再套字段规则。默认规则为客群来源、本次到检金额、本次加项金额；可继续新增字段，枚举值来自客户标签（如活跃客户）。同一字段多条规则按「或」命中，不同字段按「且」同时满足。没有预约单的客户不计入命中。主动申请不在这里配置，也不参与规则圈定。人群提交后仍由区域管理审核，审核通过后推送老系统屏蔽。华北按当前登录检线内、且在预约单中的演示客户实时计算，其他区域为周期快照。</p>
   </div>
 
   <!-- ============ 11 完成进度 ============ -->
@@ -1145,7 +1150,7 @@ const DOCS=[
 const LOGIN_DAY='2026-10-21';
 const Q=[
  {id:1,name:"王雅琴",sex:"女",age:52,card:"IK202600183",org:"北京建国门",tier:"T1",seg:"高管",active:"高活跃",orgType:"集团企业",pkgAmt:6800,addonAmt:2400,histAddon:18600,visits:6,company:"远景控股集团",pos:7,rule:"M-01 代谢主线",center:"代谢管理门诊",tel:"138****1028",source:"rule",appt:{date:"2026-10-21",slot:"09:00–10:00"},files:[]},
- {id:2,name:"周建国",sex:"男",age:61,card:"IK202601033",org:"北京建国门",tier:"T1",seg:"贵宾",active:"高活跃",orgType:"个人",pkgAmt:7500,addonAmt:1800,histAddon:12400,visits:8,company:"个人客户",pos:9,rule:"M-02 心脑血管",center:"心脑血管门诊",tel:"139****6631",source:"rule",appt:{date:"2026-10-21",slot:"14:00–15:00"},files:[]},
+ {id:2,name:"周建国",sex:"男",age:61,card:"IK202601033",org:"北京建国门",tier:"T1",seg:"贵宾",active:"高活跃",orgType:"个人",pkgAmt:7500,addonAmt:1800,histAddon:12400,visits:8,company:"个人客户",pos:9,rule:"M-02 心脑血管",center:"心脑血管门诊",tel:"139****6631",source:"rule",ikangReady:false,appt:{date:"2026-10-21",slot:"14:00–15:00"},files:[]},
  {id:3,name:"陈志远",sex:"男",age:47,card:"IK202600471",org:"上海五角场",tier:"T1",seg:"高管",active:"中活跃",orgType:"集团企业",pkgAmt:5200,addonAmt:2100,histAddon:9600,visits:4,company:"浦江实业",pos:5,rule:"M-01 代谢主线",center:"代谢管理门诊",tel:"136****2290",source:"rule",appt:null,files:[]},
  {id:4,name:"孙丽华",sex:"女",age:56,card:"IK202601502",org:"南京新街口",tier:"T2",seg:"银保",active:"中活跃",orgType:"保险公司",pkgAmt:3200,addonAmt:1200,histAddon:5400,visits:3,company:"安联人寿",pos:6,rule:"M-03 甲状腺",center:"内分泌门诊",tel:"137****4418",source:"rule",appt:null,files:[]},
  {id:5,name:"李婷",sex:"女",age:38,card:"IK202600892",org:"杭州黄龙",tier:"T2",seg:"企业客户",active:"低活跃",orgType:"集团企业",pkgAmt:2600,addonAmt:1050,histAddon:2100,visits:2,company:"网易杭州",pos:4,rule:"M-05 综合管理",center:"综合健康管理门诊",tel:"158****7733",source:"rule",appt:null,files:[]},
@@ -1154,8 +1159,17 @@ const Q=[
  {id:8,name:"郑浩",sex:"男",age:41,card:"IK202601677",org:"武汉光谷",tier:"T3",seg:"企业客户",active:"中活跃",orgType:"集团企业",pkgAmt:1200,addonAmt:520,histAddon:600,visits:1,company:"光谷生物",pos:2,rule:"主动申请",center:"综合健康管理门诊",tel:"133****8841",source:"apply",appt:null,files:[]},
  {id:9,name:"韩雪",sex:"女",age:49,card:"IK202601802",org:"北京建国门",tier:"T1",seg:"银保",active:"高活跃",orgType:"保险公司",pkgAmt:4200,addonAmt:960,histAddon:7200,visits:4,company:"泰康人寿北京",pos:5,rule:"M-03 甲状腺",center:"内分泌门诊",tel:"136****7712",source:"rule",appt:null,files:[]},
  {id:10,name:"马超",sex:"男",age:44,card:"IK202601915",org:"北京建国门",tier:"T2",seg:"高管",active:"中活跃",orgType:"集团企业",pkgAmt:2600,addonAmt:300,histAddon:1500,visits:2,company:"首钢基金",pos:2,rule:"M-05 综合管理",center:"综合健康管理门诊",tel:"139****2204",source:"rule",appt:null,files:[]},
- {id:11,name:"林晓雯",sex:"女",age:43,card:"IK202601966",org:"北京建国门",tier:"T2",seg:"企业客户",active:"高活跃",orgType:"集团企业",pkgAmt:0,addonAmt:0,histAddon:4200,visits:3,company:"客户主动预约",pos:4,rule:"主动申请",center:"综合健康管理门诊",tel:"131****9088",source:"apply",appt:null,files:["外院生化报告.pdf"]}
+ {id:11,name:"林晓雯",sex:"女",age:43,card:"IK202601966",org:"北京建国门",tier:"T2",seg:"企业客户",active:"高活跃",orgType:"集团企业",pkgAmt:0,addonAmt:0,histAddon:4200,visits:3,company:"客户主动预约",pos:4,rule:"主动申请",center:"综合健康管理门诊",tel:"131****9088",source:"apply",appt:null,files:["外院生化报告.pdf"]},
+ {id:12,name:"何倩",sex:"女",age:46,card:"IK202602088",org:"北京建国门",tier:"T1",seg:"高管",active:"高活跃",orgType:"集团企业",pkgAmt:5600,addonAmt:1200,histAddon:6400,visits:3,company:"华润集团",pos:4,rule:"M-01 代谢主线",center:"代谢管理门诊",tel:"138****6620",source:"rule",appt:null,files:[]}
 ];
+const ORDERS=[
+ {no:"YY20261018001",card:"IK202600183",name:"王雅琴",date:"2026-10-18",org:"北京建国门"},
+ {no:"YY20261018002",card:"IK202601033",name:"周建国",date:"2026-10-18",org:"北京建国门"},
+ {no:"YY20261015003",card:"IK202600471",name:"陈志远",date:"2026-10-15",org:"上海五角场"},
+ {no:"YY20261020009",card:"IK202601802",name:"韩雪",date:"2026-10-20",org:"北京建国门"},
+ {no:"YY20261019010",card:"IK202601915",name:"马超",date:"2026-10-19",org:"北京建国门"}
+];
+function orderOf(p){return ORDERS.find(o=>o.card===p.card)||null;}
 const PORTRAIT={
   1:{abn:['空腹血糖偏高','血脂异常','TSH偏高','甲状腺结节','轻度脂肪肝','维生素D不足','胰岛素抵抗'],risk:['糖尿病前期','代谢综合征风险','肝癌高危']},
   2:{abn:['空腹血糖 7.2','高尿酸','颈动脉斑块','肺磨玻璃结节','Lp-PLA2升高','同型半胱氨酸升高'],risk:['糖尿病高危','心血管事件高危','肺结节随访']},
@@ -1268,7 +1282,7 @@ const THIRD={
   {id:"T1-02",name:"慢性食物敏感检测",lab:"第三方实验室 · 免疫加项",date:"2026-09-12",pages:"5 页",tag:"牛奶 / 鸡蛋 中度",
    inds:[["牛奶蛋白 IgG","中度敏感","独立报告回收"],["鸡蛋蛋白 IgG","中度敏感","独立报告回收"],["小麦 / 大豆 / 坚果","阴性","独立报告回收"]],
    pdf:"<h5>慢性食物敏感检测报告</h5><p style='font-size:12px;color:#666;text-align:center'>第三方实验室 · 免疫加项　2026-09-12</p><ol><li>牛奶蛋白 IgG：中度敏感</li><li>鸡蛋蛋白 IgG：中度敏感</li><li>小麦、大豆、坚果：阴性</li></ol><p style='margin-top:14px;font-size:12px'>建议 4–6 周轮替回避观察，不建议长期严格忌口。</p>"},
-  {id:"T1-03",name:"肠道菌群多样性分析",lab:"第三方实验室 · 微生态加项",date:"2026-09-12",pages:"12 页",tag:"多样性偏低",
+  {id:"T1-03",name:"肠道菌群多样性分析",lab:"第三方实验室 · 微生态加项",date:"2026-09-12",pages:"12 页",tag:"多样性偏低",out:false,
    inds:[["多样性指数","偏低","独立报告回收"],["厚壁菌 / 拟杆菌比值","偏高","独立报告回收"],["产短链脂肪酸菌群","不足","独立报告回收"]],
    pdf:"<h5>肠道菌群多样性分析</h5><p style='font-size:12px;color:#666;text-align:center'>第三方实验室 · 微生态加项　2026-09-12</p><ol><li>多样性指数：偏低</li><li>厚壁菌 / 拟杆菌比值：偏高</li><li>产短链脂肪酸菌群：不足</li></ol><p style='margin-top:14px;font-size:12px'>与胰岛素抵抗、低度炎症可互相印证，作为营养干预参考，不作诊断结论。</p>"}
  ],
@@ -1276,7 +1290,7 @@ const THIRD={
   {id:"T2-01",name:"功能医学评估报告",lab:"第三方实验室 · 功能医学加项",date:"2026-09-10",pages:"9 页",tag:"胰岛素 / Lp-PLA2 / Hcy",
    inds:[["Lp-PLA2","268 ng/mL","参考 <200"],["同型半胱氨酸","18.6 μmol/L","参考 <10"],["空腹胰岛素","15.2 mU/L","最佳 <7"]],
    pdf:"<h5>功能医学独立报告</h5><p style='font-size:12px;color:#666;text-align:center'>第三方实验室 · 加项　2026-09-10</p><ol><li>Lp-PLA2 268 ng/mL（参考 &lt;200）</li><li>同型半胱氨酸 18.6 μmol/L（参考 &lt;10）</li><li>空腹胰岛素 15.2 mU/L（最佳 &lt;7）</li></ol>"},
-  {id:"T2-02",name:"心脑血管风险专项",lab:"第三方实验室 · 心血管加项",date:"2026-09-10",pages:"6 页",tag:"斑块炎症活性",
+  {id:"T2-02",name:"心脑血管风险专项",lab:"第三方实验室 · 心血管加项",date:"2026-09-10",pages:"6 页",tag:"斑块炎症活性",out:false,
    inds:[["Lp-PLA2","268 ng/mL","斑块炎症活性偏高"],["同型半胱氨酸","18.6 μmol/L","独立危险因素"]],
    pdf:"<h5>心脑血管风险专项报告</h5><p style='font-size:12px;color:#666;text-align:center'>第三方实验室 · 心血管加项　2026-09-10</p><ol><li>Lp-PLA2 268 ng/mL，提示斑块炎症活性偏高</li><li>同型半胱氨酸 18.6 μmol/L，独立危险因素</li><li>建议与颈动脉超声结果联合判读</li></ol><p style='margin-top:14px;font-size:12px'>本报告不替代心血管专科评估。</p>"}
  ]
@@ -1324,6 +1338,7 @@ function go(id){
   if(id==='p4') renderRecs();
   if(id==='p5') fillForm();
   if(id==='p6') syncCall();
+  if(id==='p7') renderLogs();
   if(id==='p10') renderTarget();
   opsPeriodBox.style.display=id==='p11'?'none':'';
   if(id==='p11') renderProgress();
@@ -1341,6 +1356,8 @@ function setWs(ws){
   document.querySelectorAll('.mod').forEach(m=>{
     m.style.display=(m.dataset.ws||'clinic')===ws?'':'none';
   });
+  const mods=document.querySelector('.mods');
+  if(mods) mods.style.display=ws==='log'?'none':'';
   ctxClinic.style.display=ws==='clinic'?'':'none';
   ctxOps.style.display=ws==='ops'?'':'none';
   ctxRule.style.display=ws==='rule'?'':'none';
@@ -1348,8 +1365,10 @@ function setWs(ws){
     ?'医生工作台 · 患者上下文来自 TrakCare'
     :ws==='ops'
     ?'区域运营 · 目标上传、完成对照、加项与医生转化'
+    :ws==='log'
+    ?'解读记录查询'
     :'集团运营 · 匹配、推荐、AI 解读模版与护栏在此配置';
-  go(ws==='ops'?'p10':ws==='rule'?'c1':'p0');
+  go(ws==='ops'?'p10':ws==='rule'?'c1':ws==='log'?'p7':'p0');
 }
 document.querySelectorAll('.mod').forEach(m=>m.onclick=()=>go(m.dataset.p));
 
@@ -1377,7 +1396,7 @@ function renderQueue(){
     <td>${r.appt.slot}</td>
     <td><span class="tag ${r.pos>=5?'warn':''}">${r.pos} 项</span></td>
     <td style="font-size:11px;color:var(--muted)">${r.rule}</td>
-    <td><button class="btn ghost sm" onclick="jump(${r.id})">查看报告</button></td>
+    <td>${r.ikangReady===false?'<button class="btn ghost sm" disabled>报告未出</button>':'<button class="btn ghost sm" onclick="jump('+r.id+')">查看报告</button>'}</td>
   </tr>`).join('')||'<tr><td colspan="10">登录当日还没有已预约客户</td></tr>';
   qCnt.textContent=rows.length;
   lineBan.textContent='登录日 '+LOGIN_DAY+'。可见检线：'+(lines.join('、')||'无')+'。只显示「客户筛选与推送」里预约到这一天的客户。';
@@ -1483,27 +1502,37 @@ function renderPreview(){
     thirdList.style.display='none'; pdfBody.style.display=''; pdfPage.style.display='';
     pdfBar.style.display='flex';
     pdfName.textContent='健康体检报告 · '+r.name+' · '+r.card;
-    pdfPage.textContent='2 / 22';
-    pdfBody.innerHTML=d.pdfIk;
+    if(r.ikangReady===false){
+      pdfPage.textContent='—';
+      pdfBody.innerHTML='<p style="padding:28px 8px;color:#8a94a6">报告未出</p>';
+    }else{
+      pdfPage.textContent='2 / 22';
+      pdfBody.innerHTML=d.pdfIk;
+    }
     return;
   }
   const list=thirdOf();
   const hit=list.find(x=>x.id===THIRDID);
-  if(!hit){
+  if(hit && hit.out===false) THIRDID=null;
+  const shown=list.find(x=>x.id===THIRDID);
+  if(!shown){
     pdfBody.style.display='none'; pdfBar.style.display='none';
     thirdList.style.display='block';
     thirdList.innerHTML=`<div class="th"><b>关联独立三方报告</b><span>共 ${list.length} 份 · ${r.name} ${r.card}</span></div>`+
-      (list.length?list.map(x=>`<div class="trow" onclick="openThird('${x.id}')">
+      (list.length?list.map(x=>{
+        const ready=x.out!==false;
+        return `<div class="trow${ready?'':' wait'}" ${ready?`onclick="openThird('${x.id}')"`:''}>
         <div class="ico">PDF</div>
         <div class="meta"><b>${x.name}</b><em>${x.lab}　${x.date}　${x.pages}　${x.tag}</em></div>
-        <div class="go">打开报告 →</div>
-      </div>`).join(''):`<div class="trow"><div class="meta"><b>暂无关联三方报告</b><em>该客户本次体检未检出独立加项报告</em></div></div>`);
+        <div class="go">${ready?'打开报告 →':'报告未出'}</div>
+      </div>`;
+      }).join(''):`<div class="trow"><div class="meta"><b>暂无关联三方报告</b><em>该客户本次体检未检出独立加项报告</em></div></div>`);
     return;
   }
   thirdList.style.display='none'; pdfBody.style.display=''; pdfBar.style.display='flex'; pdfPage.style.display='';
-  pdfName.innerHTML=`<a href="javascript:backThird()" style="color:#9ec0ff;margin-right:10px;text-decoration:none;font-weight:700">← 返回目录</a>${hit.name} · ${r.name} · ${r.card}`;
-  pdfPage.textContent='1 / '+hit.pages.replace(' 页','');
-  pdfBody.innerHTML=hit.pdf;
+  pdfName.innerHTML=`<a href="javascript:backThird()" style="color:#9ec0ff;margin-right:10px;text-decoration:none;font-weight:700">← 返回目录</a>${shown.name} · ${r.name} · ${r.card}`;
+  pdfPage.textContent='1 / '+shown.pages.replace(' 页','');
+  pdfBody.innerHTML=shown.pdf;
 }
 function openThird(id){THIRDID=id; renderPreview();}
 function backThird(){THIRDID=null; renderPreview();}
@@ -1668,7 +1697,7 @@ function submitRec(){
   const r=Q.find(x=>x.id===CUR);
   LOGS.unshift({name:r.name,card:r.card,proj:fProj.value,tel:r.tel,res:"已完成",dur:fDur.value,way:fWay.value,sat:"—",op:"张明",note:fNote.value,when:new Date().toISOString().slice(0,16).replace('T',' ')});
   toast('解读记录已提交，计时结束');
-  renderLogs(); go('p7');
+  setWs('log');
 }
 
 /* ---------------- 06 外呼 ---------------- */
@@ -1765,7 +1794,7 @@ function matchRules(p, rules){
 }
 function ruleHits(rules){
   const lines=myLines();
-  return Q.filter(p=>p.source!=='apply' && lines.includes(p.org) && matchRules(p, rules));
+  return Q.filter(p=>p.source!=='apply' && lines.includes(p.org) && orderOf(p) && matchRules(p, rules));
 }
 function screenRows(){
   const lines=myLines();
@@ -1777,7 +1806,7 @@ function screenRows(){
     if(src && p.source!==src) return false;
     if(seg && p.seg!==seg) return false;
     if(p.source==='apply') return true;
-    return matchRules(p, rules);
+    return !!orderOf(p) && matchRules(p, rules);
   });
 }
 function renderScreen(){
@@ -1785,12 +1814,14 @@ function renderScreen(){
   const rows=screenRows();
   scCnt.textContent=rows.length;
   scBody.innerHTML=rows.map(r=>{
+    const od=orderOf(r);
     const ap=r.appt?(r.appt.date+' '+r.appt.slot):'<span class="tag gray">未预约</span>';
     const mat=r.source==='apply'
       ? (r.files.map(f=>`<div style="font-size:11px">${f}</div>`).join(''))+`<label class="btn ghost sm" style="cursor:pointer;margin-top:4px">上传材料<input type="file" accept=".pdf,.jpg,.png,.zip" style="display:none" onchange="uploadMat(${r.id},this)"></label>`
       : '<span style="color:var(--muted)">—</span>';
     return `<tr>
       <td><b>${r.name}</b></td><td>${r.sex} / ${r.age}</td><td>${r.seg}</td><td>${r.org}</td>
+      <td>${od?od.no:'<span style="color:var(--muted)">—</span>'}</td><td>${od?od.date:'<span style="color:var(--muted)">—</span>'}</td>
       <td>${r.pkgAmt?yuan(r.pkgAmt):'—'}</td><td>${r.addonAmt?yuan(r.addonAmt):'—'}</td>
       <td>${r.source==='apply'?'<span class="tag warn">主动申请</span>':'<span class="tag">分院到检B2C</span>'}</td>
       <td>${ap}</td><td>${mat}</td>
@@ -1799,7 +1830,7 @@ function renderScreen(){
         <button class="btn or sm" onclick="openPush(${r.id})">推送报告解读</button>
       </td>
     </tr>`;
-  }).join('')||'<tr><td colspan="10">当前规则和检线下没有客户</td></tr>';
+  }).join('')||'<tr><td colspan="12">当前规则和检线下没有客户</td></tr>';
 }
 function openCard(id){
   const r=Q.find(x=>x.id===id);
@@ -1817,6 +1848,8 @@ function openCard(id){
     ['单位', r.company],
     ['活跃客户', r.active],
     ['来源', r.source==='apply'?'主动申请':'分院到检B2C'],
+    ['预约单号', orderOf(r)?orderOf(r).no:'—'],
+    ['预约到检', orderOf(r)?orderOf(r).date:'—'],
     ['本次检线', r.org],
     ['命中规则', r.rule]
   ];
@@ -2014,25 +2047,32 @@ function ruleText(rules){
   return Object.keys(enums).map(k=>k+'＝'+enums[k].join('/')).concat(nums).join('；')||'—';
 }
 function paintTgHead(row){
-  tgPool.textContent=num(row.arrived);
-  tgRead.textContent=num(hitOf(row));
-  tgApply.textContent=num(row.id==='hb'?Q.filter(x=>x.source==='apply'&&myLines().includes(x.org)).length:row.actPool);
-  tgSt.textContent=tgShort(row.st);
+  const set=(id,v)=>{const n=document.getElementById(id); if(n) n.textContent=v;};
+  const dis=(id,v)=>{const n=document.getElementById(id); if(n) n.disabled=v;};
+  set('tgPool', num(row.arrived));
+  set('tgRead', num(hitOf(row)));
+  set('tgApply', num(row.id==='hb'?Q.filter(x=>x.source==='apply'&&myLines().includes(x.org)).length:row.actPool));
+  set('tgSt', tgShort(row.st));
   const draft=row.st==='草稿';
   const own=mineTg(row);
-  tgLock.textContent=!own?'只读查看':draft?'可编辑':'已锁定';
-  tgLock.className='tag '+(!own?'gray':draft?'warn':'ok');
-  tgSave.disabled=!(own&&draft);
-  tgSubmit.disabled=!(own&&draft);
-  tgApprove.disabled=!(own&&row.st==='待区域审核');
-  tgReject.disabled=!(own&&row.st==='待区域审核');
-  tgPush.disabled=!(own&&row.st==='区域已审核');
+  const lock=document.getElementById('tgLock');
+  if(lock){
+    lock.textContent=!own?'只读查看':draft?'可编辑':'已锁定';
+    lock.className='tag '+(!own?'gray':draft?'warn':'ok');
+  }
+  dis('tgSave', !(own&&draft));
+  dis('tgSubmit', !(own&&draft));
+  dis('tgApprove', !(own&&row.st==='待区域审核'));
+  dis('tgReject', !(own&&row.st==='待区域审核'));
+  dis('tgPush', !(own&&row.st==='区域已审核'));
   const box=document.getElementById('calc-RK');
-  if(box) box.innerHTML='当前检线内演示名单命中 <b>'+num(hitOf(row))+'</b> 人。同一字段多条为或，不同字段为且。不设置目标转化百分比。';
-  opsRegionName.textContent=row.name;
-  opsPeriodLabel.textContent=tgPeriod.value;
+  if(box) box.innerHTML='健康咨询师推送解读前，圈定范围取预约单内客户，再套用字段规则。当前检线命中 <b>'+num(hitOf(row))+'</b> 人。同一字段多条为或，不同字段为且。';
+  if(document.getElementById('opsRegionName')) opsRegionName.textContent=row.name;
+  const period=document.getElementById('tgPeriod');
+  if(document.getElementById('opsPeriodLabel')) opsPeriodLabel.textContent=period?period.value:'2026年10月';
 }
 function renderTargetTable(){
+  if(!document.getElementById('tgBody')) return;
   tgBody.innerHTML=OPS_TG.map(r=>{
     const shield=r.push==='已屏蔽'?'<span class="tag ok">已屏蔽</span>':'<span class="tag gray">未推送</span>';
     return `<tr>
@@ -2075,7 +2115,7 @@ function renderTarget(){
     const dis=locked?'disabled':'';
     tgSegs.innerHTML=`<div class="seg" style="grid-column:1/-1">
         <h4>解读客群<span class="tier RK">字段规则</span></h4>
-        <div class="def">按客户标签和金额区间圈定。默认包含客群来源、本次到检金额、本次加项金额。枚举来自客户标签体系。主动申请不在本页配置。</div>
+        <div class="def">健康咨询师推送解读任务之前，先取预约单内客户，再用客户标签和金额区间圈定。默认包含客群来源、本次到检金额、本次加项金额。没有预约单的客户不计入命中。主动申请不在本页配置。</div>
         <div style="margin-top:8px">${ruleEditor(row.rules, dis)}</div>
         <div class="calc" id="calc-RK"></div>
       </div>`;
@@ -2123,7 +2163,8 @@ function saveTarget(){
   if(row.st!=='草稿'){toast('已提交审核，不能再改。驳回后才能编辑','warn');return;}
   row.op='李倩'; row.at=nowStamp();
   paintTgHead(row); renderTargetTable(); renderScreen();
-  toast(row.name+' '+tgPeriod.value+' 圈定规则已保存为草稿');
+  const period=document.getElementById('tgPeriod');
+  toast(row.name+(period?' '+period.value:'')+' 圈定规则已保存为草稿');
 }
 function submitTarget(){
   const row=curTg();

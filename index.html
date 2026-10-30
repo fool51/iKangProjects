@@ -335,6 +335,14 @@ p.hint{font-size:11.5px;color:var(--muted);margin:-2px 0 10px}
 .slot .lm.none{color:var(--muted)}
 .inds{display:flex;flex-wrap:wrap;gap:6px}
 .inds label{font-size:12px;display:flex;align-items:center;gap:4px;background:var(--card);border:1px solid var(--line);border-radius:4px;padding:3px 8px;cursor:pointer}
+.prow{display:grid;grid-template-columns:32px 1fr;gap:8px;align-items:start;margin:0 0 8px}
+.pletter{display:inline-flex;align-items:center;justify-content:center;width:28px;height:28px;background:var(--blue);color:#fff;font-weight:800;border-radius:4px;font-size:13px}
+.pecho{font-size:12px;color:var(--blue-dk);font-weight:700;margin-top:3px;min-height:16px}
+.pecho.miss{color:var(--red);font-weight:400}
+.trig{border:1px solid var(--line);border-radius:6px;padding:8px 10px;margin-bottom:8px;background:#fff}
+.trig.off{opacity:.48}
+.trig .hd{display:flex;align-items:center;gap:6px;font-size:12px;font-weight:700;color:var(--blue-dk);margin-bottom:6px}
+.trig .hd input{margin:0}
 .book-ok{background:var(--green-pale);border:1px solid #cfe6d9;border-radius:6px;padding:10px 12px;margin-top:10px;font-size:12px;color:var(--green)}
 @media(max-width:1100px){.grid2,.ai-wrap,.stats,.prev,.formg,.dhead,.arch,.seg3,.seg2,.grd,.kv{grid-template-columns:1fr}
   .sumg{grid-template-columns:1fr 1fr}}
@@ -633,6 +641,7 @@ p.hint{font-size:11.5px;color:var(--muted);margin:-2px 0 10px}
           <select id="fWay" style="width:100%"><option>门诊面对面</option><option>电话外呼</option><option>视频问诊</option></select>
         </div>
         <div><label>解读用时</label><input type="text" id="fDur" value="00:00:15" readonly style="width:100%"></div>
+        <div><label>短信通知</label><div style="padding-top:4px"><button class="btn ghost sm" onclick="toast('解读完成短信已发送（模拟）')">发送短信</button></div></div>
         <div class="full"><label><i>*</i>解读结果</label>
           <div class="chk">
             <label><input type="checkbox" checked> 体检报告全面解读</label>
@@ -873,14 +882,14 @@ p.hint{font-size:11.5px;color:var(--muted);margin:-2px 0 10px}
       <tbody id="dBody"></tbody>
     </table></div>
     <div id="dPager"></div>
-    <p class="note">「参与分流」的指标可作为客户匹配规则的条件；「参与推荐」的指标可作为推荐规则的触发项。两项分开控制。指标名称也会进入「计算指标」的指标池。</p>
+    <p class="note">「参与分流」的指标可作为客户匹配规则的条件；「参与推荐」的指标可作为推荐规则的触发项。两项分开控制。计算指标和推荐规则通过指标 miscode 回显本字典中的指标名称。</p>
   </div>
 
   <div class="pane" id="c11">
     <h3 class="sec">计算指标</h3>
-    <p class="hint">用指标字典里的指标写计算公式，不限于功能医学。例如胰岛素抵抗 HOMA-IR、血脂比值 TG/HDL-C。结果超出参考后，医生在报告侧栏点选「计算指标」标签，就会出现在指标判读和历年指标里；再点一次即隐藏。</p>
+    <p class="hint">计算公式先用大写字母代表指标，如 (A+B)/C。输入公式后解析出字母，再为每个字母填写指标 miscode，输入框下方回显指标名称。结果超出参考后，医生在报告侧栏点选「计算指标」标签，就会出现在指标判读和历年指标里；再点一次即隐藏。</p>
     <div class="toolbar">
-      <span class="tag">公式指标只能从指标字典选取</span>
+      <span class="tag">公式用大写字母，字母对应指标 miscode</span>
       <span style="margin-left:auto"></span>
       <button class="btn or sm" onclick="openRatio()">新增计算指标</button>
     </div>
@@ -1041,14 +1050,27 @@ p.hint{font-size:11.5px;color:var(--muted);margin:-2px 0 10px}
 <div class="modal" id="mdR"><div class="md">
   <h3 id="mdRTitle">新增推荐规则</h3>
   <div class="bd">
-    <div style="margin-bottom:6px;font-size:11px;color:var(--muted)">触发条件可手写，也可由下面一行生成</div>
+    <div style="margin-bottom:6px;font-size:11px;color:var(--muted)">指标与异常诊断二选一。填写 miscode 后下方回显名称，再点「写入条件」。也可直接在触发条件里手写。</div>
     <div class="cond">
-      <div class="row"><span class="lg">IF</span>
-        <select id="rField"><option>25-OH-D</option><option>HOMA-IR</option><option>甘油三酯</option><option>同型半胱氨酸</option><option>hsCRP</option><option>需3个月复评项</option><option>肺结节 / 肿瘤倾向</option></select>
-        <select id="rOp"><option>&lt;</option><option>≥</option><option>存在</option></select>
-        <input type="text" id="rVal" placeholder="阈值" style="max-width:110px">
-        <button class="btn ghost sm" type="button" onclick="fillRuleCond()">写入条件</button>
+      <div class="trig" id="trigInd">
+        <label class="hd"><input type="radio" name="rTrig" value="ind" checked onchange="syncRuleTrig()">指标</label>
+        <div class="row">
+          <div style="flex:1.4;min-width:160px">
+            <input type="text" id="rIndMis" placeholder="指标code如CHK_25OHD" oninput="echoRuleMis('ind')">
+            <div class="pecho" id="rIndEcho"></div>
+          </div>
+          <select id="rOp"><option>&lt;</option><option>≥</option><option>存在</option></select>
+          <input type="text" id="rVal" placeholder="阈值" style="max-width:120px">
+        </div>
       </div>
+      <div class="trig" id="trigDx">
+        <label class="hd"><input type="radio" name="rTrig" value="dx" onchange="syncRuleTrig()">异常诊断</label>
+        <div>
+          <input type="text" id="rDxMis" placeholder="诊断code（2.1.2.212）" oninput="echoRuleMis('dx')">
+          <div class="pecho" id="rDxEcho"></div>
+        </div>
+      </div>
+      <div style="text-align:right"><button class="btn ghost sm" type="button" onclick="fillRuleCond()">写入条件</button></div>
     </div>
     <div class="formg" style="margin-top:12px">
       <div class="full"><label><i>*</i>触发条件</label><textarea id="rCond" placeholder="如：25-OH-D < 50 nmol/L"></textarea></div>
@@ -1097,15 +1119,15 @@ p.hint{font-size:11.5px;color:var(--muted);margin:-2px 0 10px}
     <div class="formg">
       <div><label><i>*</i>指标名称</label><input type="text" id="ratName" placeholder="如：HOMA-IR 胰岛素抵抗"></div>
       <div><label>单位</label><input type="text" id="fUnit" placeholder="无单位可填 —"></div>
-      <div class="full"><label><i>*</i>计算公式</label><input type="text" id="fExpr" placeholder="如：空腹血糖 × 空腹胰岛素 / 22.5"></div>
+      <div class="full"><label><i>*</i>计算公式</label><input type="text" id="fExpr" placeholder="如：(A+B)/C" oninput="paintRatioParams()"></div>
       <div><label>常规参考下限（可空）</label><input type="text" id="fLo" placeholder="空表示无下限"></div>
       <div><label>常规参考上限（可空）</label><input type="text" id="fHi" placeholder="如 2.5"></div>
       <div><label>最佳下限（可空）</label><input type="text" id="fBlo"></div>
       <div><label>最佳上限（可空）</label><input type="text" id="fBhi" placeholder="如 1.5"></div>
       <div><label>状态</label><select id="fOn"><option value="1">启用</option><option value="0">停用</option></select></div>
     </div>
-    <div style="margin:12px 0 6px;font-size:11px;color:var(--muted)">入公式指标（从指标字典选取，可多选）</div>
-    <div class="inds" id="fInds"></div>
+    <div style="margin:12px 0 6px;font-size:11px;color:var(--muted)">公式参数（由计算公式中的大写字母解析）。填写指标 miscode 后，下方回显指标名称。示例：CHK_FPG 空腹血糖，CHK_FINS 空腹胰岛素，CHK_TG 甘油三酯，CHK_HDL HDL-C。</div>
+    <div id="fParams"></div>
   </div>
   <div class="ft"><button class="btn ghost" onclick="mdF.classList.remove('on')">取消</button><button class="btn or" onclick="saveRatio()">保存比值</button></div>
 </div></div>
@@ -1664,7 +1686,7 @@ function ratioSeries(pid){
     const pts=pack[r.id];
     const last=pts[pts.length-1][1];
     const over=(r.hi!=null&&last>r.hi)||(r.lo!=null&&last<r.lo);
-    return {n:r.name, u:r.unit||'—', lo:r.lo, hi:r.hi, ref:rangeText(r.lo,r.hi), best:rangeText(r.blo,r.bhi), pts, over, expr:r.expr, last, ratio:true};
+    return {n:r.name, u:r.unit||'—', lo:r.lo, hi:r.hi, ref:rangeText(r.lo,r.hi), best:rangeText(r.blo,r.bhi), pts, over, expr:exprShow(r), last, ratio:true};
   }).filter(x=>x.over);
 }
 function bestRange(s){
@@ -2413,9 +2435,9 @@ let MATCH=[
 ];
 let RULE=[
   {id:"R-01",cond:"需3个月复评项 存在",mis:"ITEM199",tp:"复查转化",item:"199 复查包",url:"https://goods.ikang.com/p/199",price:"¥199",talk:"窗口期 + 当天免挂号 + 仍由本人解读",scope:"全国",on:true},
-  {id:"R-02",cond:"25-OH-D < 50 nmol/L",mis:"CHK_25OHD",tp:"营养素",item:"维生素 D3 + 镁",url:"https://goods.ikang.com/p/vd3-mg",price:"¥380 / 月",talk:"最佳值 80–120，3 个月复评再调整",scope:"全国",on:true},
+  {id:"R-02",cond:"25-OH-D < 50 nmol/L",kind:"ind",trigMis:"CHK_25OHD",trigName:"25-OH-D",op:"<",val:"50 nmol/L",mis:"CHK_25OHD",tp:"营养素",item:"维生素 D3 + 镁",url:"https://goods.ikang.com/p/vd3-mg",price:"¥380 / 月",talk:"最佳值 80–120，3 个月复评再调整",scope:"全国",on:true},
   {id:"R-03",cond:"甘油三酯 ≥1.7 或 hsCRP ≥2.0",mis:"CHK_TG_HSCRP",tp:"营养素",item:"Omega-3",url:"https://goods.ikang.com/p/omega3",price:"¥260 / 月",talk:"辅助甘油三酯与低度炎症，不替代药物",scope:"全国",on:true},
-  {id:"R-04",cond:"HOMA-IR ≥2.5",mis:"CHK_HOMA",tp:"深度筛查",item:"胰岛素抵抗评估包",url:"https://goods.ikang.com/p/homa-pack",price:"¥880",talk:"OGTT + 胰岛素释放，先看曲线再干预",scope:"全国",on:true},
+  {id:"R-04",cond:"HOMA-IR ≥2.5",kind:"ind",trigMis:"CHK_HOMA",trigName:"HOMA-IR",op:"≥",val:"2.5",mis:"CHK_HOMA",tp:"深度筛查",item:"胰岛素抵抗评估包",url:"https://goods.ikang.com/p/homa-pack",price:"¥880",talk:"OGTT + 胰岛素释放，先看曲线再干预",scope:"全国",on:true},
   {id:"R-05",cond:"T1 且 代谢主线命中",mis:"PKG_META3M",tp:"门诊套餐",item:"代谢管理 3 个月方案",url:"https://goods.ikang.com/p/meta-3m",price:"¥2,980",talk:"疗程化随访，一次解读讲不完",scope:"华北大区",on:true},
   {id:"R-06",cond:"同型半胱氨酸 ≥15",mis:"CHK_HCY",tp:"营养素",item:"叶酸 + B6 + B12",url:"https://goods.ikang.com/p/b-complex",price:"¥260 / 月",talk:"独立危险因素，需与主治用药协同",scope:"全国",on:true},
   {id:"R-07",cond:"肺结节 / 肿瘤倾向 存在",mis:"IMG_NODULE",tp:"转诊（禁推荐）",item:"呼吸 / 肿瘤专科转诊",url:"",price:"—",talk:"不做倾向判断，规范转诊并协助预约",scope:"全国",on:true}
@@ -2433,10 +2455,16 @@ let DICT=[
   ["25-OH-D","nmol/L",">30","80–120","营养与炎症",false,true],
   ["超敏 CRP","mg/L","<3.0","<1.0","营养与炎症",false,true]
 ];
+const IND_MIS={
+  CHK_FPG:"空腹血糖",CHK_HBA1C:"糖化血红蛋白",CHK_FINS:"空腹胰岛素",CHK_HOMA:"HOMA-IR",
+  CHK_TG:"甘油三酯",CHK_HDL:"HDL-C",CHK_LDL:"LDL-C",CHK_LPPLA2:"Lp-PLA2",
+  CHK_TSH:"促甲状腺激素 TSH",CHK_25OHD:"25-OH-D",CHK_HSCRP:"超敏 CRP",CHK_HCY:"同型半胱氨酸"
+};
 let RATIOS=[
-  {id:"F-01",name:"HOMA-IR 胰岛素抵抗",expr:"空腹血糖 × 空腹胰岛素 / 22.5",inds:["空腹血糖","空腹胰岛素"],unit:"—",lo:null,hi:2.5,blo:null,bhi:1.5,on:true},
-  {id:"F-02",name:"TG/HDL-C",expr:"甘油三酯 / HDL-C",inds:["甘油三酯","HDL-C"],unit:"—",lo:null,hi:2,blo:null,bhi:1,on:true}
+  {id:"F-01",name:"HOMA-IR 胰岛素抵抗",expr:"(A×B)/22.5",params:[{k:"A",mis:"CHK_FPG",name:"空腹血糖"},{k:"B",mis:"CHK_FINS",name:"空腹胰岛素"}],inds:["空腹血糖","空腹胰岛素"],unit:"—",lo:null,hi:2.5,blo:null,bhi:1.5,on:true},
+  {id:"F-02",name:"TG/HDL-C",expr:"A/B",params:[{k:"A",mis:"CHK_TG",name:"甘油三酯"},{k:"B",mis:"CHK_HDL",name:"HDL-C"}],inds:["甘油三酯","HDL-C"],unit:"—",lo:null,hi:2,blo:null,bhi:1,on:true}
 ];
+let ratioParams={};
 const RATIO_PTS={
   1:{"F-01":[["2024",2.10],["2025",2.72],["2026",3.58]],"F-02":[["2024",1.62],["2025",1.94],["2026",2.36]]},
   2:{"F-01":[["2024",2.40],["2025",3.10],["2026",4.86]],"F-02":[["2024",2.20],["2025",2.80],["2026",3.42]]}
@@ -2588,8 +2616,48 @@ function saveMatch(){
   }
   mdM.classList.remove('on'); renderMatch();
 }
+function lookupInd(code){
+  const k=String(code||'').trim().toUpperCase();
+  return k?IND_MIS[k]||'':'';
+}
+function lookupDx(code){
+  const k=String(code||'').trim();
+  const x=k?XUANHU.find(d=>d.dx===k):null;
+  return x?x.dxNm:'';
+}
+function paintEcho(el, code, name, miss){
+  const s=String(code||'').trim();
+  if(!s){el.textContent='';el.className='pecho';return;}
+  if(name){el.textContent=name;el.className='pecho';}
+  else{el.textContent=miss;el.className='pecho miss';}
+}
+function echoRuleMis(which){
+  if(which==='ind') paintEcho(rIndEcho, rIndMis.value, lookupInd(rIndMis.value), '未匹配到指标');
+  else paintEcho(rDxEcho, rDxMis.value, lookupDx(rDxMis.value), '未匹配到异常诊断');
+}
+function syncRuleTrig(){
+  const mode=(document.querySelector('input[name=rTrig]:checked')||{}).value||'ind';
+  trigInd.classList.toggle('off', mode!=='ind');
+  trigDx.classList.toggle('off', mode!=='dx');
+  rIndMis.disabled=rOp.disabled=rVal.disabled=mode!=='ind';
+  rDxMis.disabled=mode!=='dx';
+  if(mode==='ind'){
+    rDxMis.value=''; paintEcho(rDxEcho, '', '', '');
+  }else{
+    rIndMis.value=''; rVal.value=''; paintEcho(rIndEcho, '', '', '');
+  }
+}
 function fillRuleCond(){
-  rCond.value=rField.value+' '+rOp.value+' '+(rVal.value||'');
+  const mode=(document.querySelector('input[name=rTrig]:checked')||{}).value||'ind';
+  if(mode==='ind'){
+    const name=lookupInd(rIndMis.value);
+    if(!name){toast('请填写可回显的指标 miscode','warn');return;}
+    rCond.value=rOp.value==='存在'?name+' 存在':name+' '+rOp.value+' '+(rVal.value||'');
+  }else{
+    const name=lookupDx(rDxMis.value);
+    if(!name){toast('请填写可回显的异常诊断 miscode','warn');return;}
+    rCond.value=name;
+  }
 }
 function renderRule(){
   const t=rTp.value;
@@ -2610,10 +2678,37 @@ function renderRule(){
   const pg=paintPage('r', htmls, '<tr><td colspan="10">无匹配规则</td></tr>');
   rBody.innerHTML=pg.body; rPager.innerHTML=pg.pager;
 }
+function ruleTrigFromForm(){
+  const mode=(document.querySelector('input[name=rTrig]:checked')||{}).value||'ind';
+  if(mode==='dx'){
+    const name=lookupDx(rDxMis.value);
+    return name?{kind:'dx',trigMis:rDxMis.value.trim(),trigName:name,op:'',val:''}:{kind:'',trigMis:'',trigName:'',op:'',val:''};
+  }
+  const name=lookupInd(rIndMis.value);
+  return name?{kind:'ind',trigMis:rIndMis.value.trim().toUpperCase(),trigName:name,op:rOp.value,val:rVal.value.trim()}:{kind:'',trigMis:'',trigName:'',op:'',val:''};
+}
+function applyRuleTrig(r){
+  const dx=document.querySelector('input[name=rTrig][value=dx]');
+  const ind=document.querySelector('input[name=rTrig][value=ind]');
+  rIndMis.value=''; rDxMis.value=''; rVal.value=''; rOp.value='<';
+  if(r&&r.kind==='dx'){
+    dx.checked=true; rDxMis.value=r.trigMis||'';
+  }else{
+    ind.checked=true;
+    if(r&&r.kind==='ind'){
+      rIndMis.value=r.trigMis||'';
+      if(r.op) rOp.value=r.op;
+      rVal.value=r.val||'';
+    }
+  }
+  syncRuleTrig();
+  echoRuleMis('ind'); echoRuleMis('dx');
+}
 function openRule(){
   editRuleId=null;
   mdRTitle.textContent='新增推荐规则';
-  rCond.value=''; rVal.value=''; rMis.value=''; rItem.value=''; rUrl.value=''; rPrice.value=''; rTalk.value=''; rSt.value='启用';
+  rCond.value=''; rMis.value=''; rItem.value=''; rUrl.value=''; rPrice.value=''; rTalk.value=''; rSt.value='启用';
+  applyRuleTrig(null);
   mdR.classList.add('on');
 }
 function editRecRule(id){
@@ -2625,6 +2720,7 @@ function editRecRule(id){
   rPrice.value=r.price==='—'?'':r.price; rTalk.value=r.talk==='—'?'':r.talk;
   ensureOpt(rType,r.tp); ensureOpt(rScope,r.scope);
   rSt.value=r.on?'启用':'停用';
+  applyRuleTrig(r);
   mdR.classList.add('on');
 }
 function saveRecRule(){
@@ -2636,7 +2732,7 @@ function saveRecRule(){
     const m=item.match(/https?:\/\/\S+/);
     if(m){url=m[0]; item=item.replace(m[0],'').trim()||item;}
   }
-  const row={cond:rCond.value.trim(),mis:rMis.value.trim(),tp:rType.value,item:item,url:url,price:rPrice.value||'—',talk:rTalk.value||'—',scope:rScope.value,on:rSt.value==='启用'};
+  const row=Object.assign({cond:rCond.value.trim(),mis:rMis.value.trim(),tp:rType.value,item:item,url:url,price:rPrice.value||'—',talk:rTalk.value||'—',scope:rScope.value,on:rSt.value==='启用'}, ruleTrigFromForm());
   if(editRuleId){
     Object.assign(RULE.find(x=>x.id===editRuleId), row);
     toast(editRuleId+' 已更新，次日 00:00 生效');
@@ -2708,7 +2804,7 @@ function renderRatio(){
   const htmls=RATIOS.map(r=>`<tr>
     <td>${r.id}</td><td><b>${r.name}</b></td>
     <td style="font-size:11.5px">${r.expr}</td>
-    <td>${r.inds.map(n=>'<span class="tag">'+n+'</span>').join(' ')}</td>
+    <td>${(r.params||[]).length?(r.params.map(p=>'<span class="tag">'+p.k+' '+p.name+'</span>').join(' ')):(r.inds||[]).map(n=>'<span class="tag">'+n+'</span>').join(' ')}</td>
     <td>${rangeText(r.lo,r.hi)}</td><td style="color:var(--orange);font-weight:700">${rangeText(r.blo,r.bhi)}</td>
     <td>${r.on?'<span class="tag ok">启用</span>':'<span class="tag gray">停用</span>'}</td>
     <td><button class="btn ghost sm" onclick="editRatio('${r.id}')">编辑</button></td>
@@ -2716,15 +2812,50 @@ function renderRatio(){
   const pg=paintPage('f', htmls, '<tr><td colspan="8">暂无计算指标</td></tr>');
   fBody.innerHTML=pg.body; fPager.innerHTML=pg.pager;
 }
-function paintInds(selected){
-  const set=new Set(selected||[]);
-  fInds.innerHTML=DICT.map(d=>`<label><input type="checkbox" value="${d[0]}" ${set.has(d[0])?'checked':''}>${d[0]}</label>`).join('');
+function parseLetters(expr){
+  const seen=[];
+  String(expr||'').replace(/[A-Z]/g, ch=>{ if(!seen.includes(ch)) seen.push(ch); return ch; });
+  return seen;
+}
+function exprShow(r){
+  let s=r.expr||'';
+  (r.params||[]).forEach(p=>{ if(p.k&&p.name) s=s.replace(new RegExp(p.k,'g'), p.name); });
+  return s;
+}
+function paintRatioParams(){
+  const letters=parseLetters(fExpr.value);
+  const keep={};
+  letters.forEach(L=>{ if(ratioParams[L]) keep[L]=ratioParams[L]; });
+  ratioParams=keep;
+  if(!letters.length){
+    fParams.innerHTML='<div class="pecho" style="font-weight:400;color:var(--muted)">输入公式后，这里按字母列出参数</div>';
+    return;
+  }
+  fParams.innerHTML=letters.map(L=>{
+    const mis=ratioParams[L]||'';
+    const name=lookupInd(mis);
+    const echo=mis?(name||'未匹配到指标'):'';
+    return `<div class="prow"><span class="pletter">${L}</span><div>
+      <input type="text" value="${mis.replace(/"/g,'&quot;')}" placeholder="指标 miscode" oninput="setRatioMis('${L}',this)">
+      <div class="pecho${mis&&!name?' miss':''}" data-echo="${L}">${echo}</div>
+    </div></div>`;
+  }).join('');
+}
+function setRatioMis(L, inp){
+  ratioParams[L]=inp.value.trim();
+  const echo=document.querySelector('[data-echo="'+L+'"]');
+  if(!echo) return;
+  const name=lookupInd(inp.value);
+  const s=inp.value.trim();
+  echo.textContent=s?(name||'未匹配到指标'):'';
+  echo.className='pecho'+(s&&!name?' miss':'');
 }
 function openRatio(){
   editRatioId=null;
   mdFTitle.textContent='新增计算指标';
   ratName.value=''; fUnit.value='—'; fExpr.value=''; fLo.value=''; fHi.value=''; fBlo.value=''; fBhi.value=''; fOn.value='1';
-  paintInds([]);
+  ratioParams={};
+  paintRatioParams();
   mdF.classList.add('on');
 }
 function editRatio(id){
@@ -2736,14 +2867,22 @@ function editRatio(id){
   fLo.value=r.lo==null?'':r.lo; fHi.value=r.hi==null?'':r.hi;
   fBlo.value=r.blo==null?'':r.blo; fBhi.value=r.bhi==null?'':r.bhi;
   fOn.value=r.on?'1':'0';
-  paintInds(r.inds);
+  ratioParams={};
+  (r.params||[]).forEach(p=>{ ratioParams[p.k]=p.mis; });
+  paintRatioParams();
   mdF.classList.add('on');
 }
 function saveRatio(){
   if(!ratName.value.trim()||!fExpr.value.trim()){toast('请填写指标名称和公式','warn');return;}
-  const inds=[...fInds.querySelectorAll('input:checked')].map(x=>x.value);
-  if(inds.length<2){toast('请至少选择 2 个入公式指标','warn');return;}
-  const row={name:ratName.value.trim(),expr:fExpr.value.trim(),inds,unit:fUnit.value.trim()||'—',lo:numOrNull(fLo.value),hi:numOrNull(fHi.value),blo:numOrNull(fBlo.value),bhi:numOrNull(fBhi.value),on:fOn.value==='1'};
+  const letters=parseLetters(fExpr.value);
+  if(!letters.length){toast('公式中请用大写字母代表指标，如 (A+B)/C','warn');return;}
+  const params=letters.map(k=>{
+    const mis=(ratioParams[k]||'').trim().toUpperCase();
+    return {k, mis, name:lookupInd(mis)};
+  });
+  if(params.some(p=>!p.name)){toast('请为每个字母填写可回显的指标 miscode','warn');return;}
+  const inds=params.map(p=>p.name);
+  const row={name:ratName.value.trim(),expr:fExpr.value.trim(),params,inds,unit:fUnit.value.trim()||'—',lo:numOrNull(fLo.value),hi:numOrNull(fHi.value),blo:numOrNull(fBlo.value),bhi:numOrNull(fBhi.value),on:fOn.value==='1'};
   if(editRatioId){
     Object.assign(RATIOS.find(x=>x.id===editRatioId), row);
     toast(editRatioId+' 已更新');

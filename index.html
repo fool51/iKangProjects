@@ -17,6 +17,7 @@ body{
   font-family:"Microsoft YaHei","PingFang SC","Segoe UI",sans-serif;
   background:#dfe5ee;color:var(--text);font-size:13px;line-height:1.5;
   padding:14px;
+  -webkit-user-select:none;user-select:none;
 }
 .app{max-width:1320px;margin:0 auto;background:#fff;border-radius:8px;overflow:hidden;box-shadow:0 8px 30px rgba(20,58,120,.16)}
 
@@ -369,6 +370,25 @@ p.hint{font-size:11.5px;color:var(--muted);margin:-2px 0 10px}
   }
   paint();
   window.addEventListener('resize',paint);
+})();
+</script>
+<script>
+(function(){
+  function block(e){e.preventDefault();}
+  document.addEventListener('contextmenu',block);
+  document.addEventListener('copy',block);
+  document.addEventListener('cut',block);
+  document.addEventListener('dragstart',block);
+  document.addEventListener('selectstart',function(e){
+    var t=e.target;
+    var tag=t&&t.tagName;
+    if(tag==='INPUT'||tag==='TEXTAREA') return;
+    e.preventDefault();
+  });
+  document.addEventListener('keydown',function(e){
+    var k=(e.key||'').toLowerCase();
+    if((e.ctrlKey||e.metaKey)&&(k==='c'||k==='x'||k==='a')) e.preventDefault();
+  });
 })();
 </script>
 <div class="app">

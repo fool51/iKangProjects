@@ -456,7 +456,6 @@ p.hint{font-size:11.5px;color:var(--muted);margin:-2px 0 10px}
     <div class="mod" data-p="p6" data-ws="clinic"><span class="ic">06</span>电话外呼<span class="sub">跳转至外呼系统</span></div>
     <div class="mod" data-p="p10" data-ws="ops" style="display:none"><span class="ic">01</span>客群目标设定</div>
     <div class="mod" data-p="p11" data-ws="ops" style="display:none"><span class="ic">02</span>解读与分源转化</div>
-    <div class="mod" data-p="p12" data-ws="ops" style="display:none"><span class="ic">03</span>加项与医生转化<span class="ph2">2期开发内容</span></div>
     <div class="mod" data-p="c1" data-ws="rule" style="display:none"><span class="ic">01</span>AI 开关</div>
     <div class="mod" data-p="c2" data-ws="rule" style="display:none"><span class="ic">02</span>客户匹配规则</div>
     <div class="mod" data-p="c3" data-ws="rule" style="display:none"><span class="ic">03</span>推荐规则</div>
@@ -506,7 +505,7 @@ p.hint{font-size:11.5px;color:var(--muted);margin:-2px 0 10px}
         <div style="font-size:11px;color:var(--muted);margin-bottom:6px">异常指标</div>
         <div class="ptags" id="cardAbn"></div>
         <div style="font-size:11px;color:var(--muted);margin:10px 0 6px">疾病风险</div>
-        <div class="ptags" id="cardRisk"></div>
+        <div style="font-size:12px;color:#8a94a6">疾病风险提示存在医疗争议，暂不提供信息展示。</div>
       </div>
       <div class="box" style="margin-top:12px">
         <h3 class="sec">历史到检阳性报告</h3>
@@ -839,16 +838,16 @@ p.hint{font-size:11.5px;color:var(--muted);margin:-2px 0 10px}
     </div>
     <div class="tbl-wrap"><table>
       <thead><tr><th style="width:28px"><input type="checkbox" onchange="document.querySelectorAll('.aichk').forEach(x=>x.checked=this.checked)"></th>
-      <th>序号</th><th>检线ID</th><th>检线名称</th><th>中心ID</th><th>关联的门诊中心</th><th>AI助手配置</th><th>AI解读模版</th><th>合规护栏</th><th>操作人</th><th>操作时间</th></tr></thead>
+      <th>序号</th><th>检线ID</th><th>检线名称</th><th>中心ID</th><th>关联的门诊中心</th><th>AI助手配置</th><th>合规护栏</th><th>操作人</th><th>操作时间</th></tr></thead>
       <tbody id="aiBody"></tbody>
     </table></div>
     <div id="aiPager"></div>
-    <p class="note">AI助手配置、合规护栏变更后，医生在「报告解读作业」刷新即生效。AI解读模版的版本下拉为 2 期开发内容，本次仅展示选择。</p>
+    <p class="note">AI助手配置、合规护栏变更后，医生在「报告解读作业」刷新即生效。</p>
   </div>
 
   <div class="pane" id="c2">
     <h3 class="sec">客户匹配规则</h3>
-    <p class="hint">列表同时展示悬壶系统的门诊异常、异常诊断，以及已配置的匹配门诊中心、医生专科和生效范围。</p>
+    <p class="hint">列表同时展示悬壶系统的门诊异常、异常诊断，以及已配置的匹配门诊中心和生效范围。</p>
     <div class="toolbar">
       <span class="tag">门诊异常 × 异常诊断 → 匹配门诊中心（取悬壶配置）</span>
       <span style="margin-left:auto"></span>
@@ -857,7 +856,7 @@ p.hint{font-size:11.5px;color:var(--muted);margin:-2px 0 10px}
     <div class="tbl-wrap"><table>
       <thead><tr>
         <th>序号</th><th>门诊异常编码</th><th>门诊异常名称</th><th>异常诊断编码</th><th>异常诊断名称</th><th>修改时间</th><th>匹配门诊中心</th>
-        <th>匹配医生专科<span class="ph2">2期开发内容</span></th><th>生效范围</th><th>状态</th><th>操作</th>
+        <th>生效范围</th><th>状态</th><th>操作</th>
       </tr></thead>
       <tbody id="mBody"></tbody>
     </table></div>
@@ -1057,9 +1056,6 @@ p.hint{font-size:11.5px;color:var(--muted);margin:-2px 0 10px}
       <div><label><i>*</i>匹配门诊中心类型</label>
         <select id="mCenter"><option>代谢管理门诊</option><option>心脑血管门诊</option><option>内分泌/甲状腺门诊</option><option>综合健康管理门诊</option><option>不承接，转专科</option><option>不进入门诊深度解读</option></select>
       </div>
-      <div><label>匹配医生专科<span class="ph2">2期开发内容</span></label>
-        <select id="mDoc"><option>内分泌</option><option>心内</option><option>消化</option><option>全科</option><option>全科高年资</option><option>内分泌 / 全科高年资</option><option>—（不分配）</option><option>—</option></select>
-      </div>
       <div><label>生效范围</label><select id="mScope"><option>全国</option><option>华北大区</option><option>仅北京建国门</option></select></div>
       <div><label>状态</label><select id="mSt"><option>启用</option><option>停用</option></select></div>
     </div>
@@ -1157,10 +1153,14 @@ p.hint{font-size:11.5px;color:var(--muted);margin:-2px 0 10px}
   <div class="bd">
     <div class="idx"><span>客户</span><span class="v" id="bkWho">—</span></div>
     <div class="idx"><span>预约项目</span><span class="v" id="bkItem">—</span></div>
-    <div class="idx"><span>号源来源</span><span class="v">TrakCare HIS · 北京建国门</span></div>
+    <div class="idx"><span>号源来源</span><span class="v" id="bkSrc">TrakCare HIS</span></div>
     <div class="toolbar" style="margin-top:10px">
-      <label>门诊</label>
-      <select id="bkDept" onchange="renderSlots()"></select>
+      <label>门诊分院</label>
+      <select id="bkBranch" onchange="syncBookCenter()"></select>
+      <label>门诊中心</label>
+      <select id="bkDept" onchange="syncBookDoc()"></select>
+      <label>门诊医生</label>
+      <select id="bkDoc" onchange="syncBookSlots()"></select>
     </div>
     <div id="bkSlots"></div>
     <div class="book-ok" id="bkOk" style="display:none"></div>
@@ -1420,7 +1420,7 @@ function setWs(ws){
   wsHint.textContent=ws==='clinic'
     ?'医生工作台 · 患者上下文来自 TrakCare'
     :ws==='ops'
-    ?'区域运营 · 目标上传、完成对照、加项与医生转化'
+    ?'区域运营 · 目标上传与完成对照'
     :ws==='log'
     ?'解读记录查询'
     :'集团运营 · 匹配、推荐、AI 解读模版与护栏在此配置';
@@ -1945,7 +1945,7 @@ function openCard(id){
   cardTitle.textContent=r.name+' · 客户卡';
   cardPush.dataset.id=id;
   const items=[
-    ['性别',r.sex],['年龄',r.age+' 岁'],['客群',r.seg],['消费分层',r.tier],
+    ['性别',r.sex],['年龄',r.age+' 岁'],['客群',r.seg],['项目客源', r.source==='apply'?'主动预约':({集团企业:'企业团检',个人:'个检',保险公司:'银保团检',银行:'银行团检'}[r.orgType]||r.orgType||'—')],['消费分层',r.tier],
     ['本次体检套餐价', r.pkgAmt?yuan(r.pkgAmt):'—'],
     ['本次加项价格', r.addonAmt?yuan(r.addonAmt):'—'],
     ['历史加项金额', yuan(r.histAddon)],
@@ -1956,13 +1956,11 @@ function openCard(id){
     ['来源', r.source==='apply'?'主动申请':'分院到检B2C'],
     ['预约单号', orderOf(r)?orderOf(r).no:'—'],
     ['预约到检', orderOf(r)?orderOf(r).date:'—'],
-    ['本次检线', r.org],
-    ['命中规则', r.rule]
+    ['本次检线', r.org]
   ];
   cardKv.innerHTML=items.map(([k,v])=>`<div class="it"><span>${k}</span><b>${v}</b></div>`).join('');
-  const pf=PORTRAIT[r.id]||{abn:['暂无异常指标标签'],risk:['暂无疾病风险标签']};
+  const pf=PORTRAIT[r.id]||{abn:['暂无异常指标标签']};
   cardAbn.innerHTML=pf.abn.map(t=>`<span class="tag">${t}</span>`).join('');
-  cardRisk.innerHTML=pf.risk.map(t=>`<span class="tag warn">${t}</span>`).join('');
   const visits=HIST_VISITS[r.id]||[];
   cardVisits.innerHTML=visits.length?visits.map((v,i)=>`<div class="vcard" onclick="openHistVisit(${r.id},${i})"><b>${v.date}</b><span>${v.org} · 阳性 ${v.abn.length} 项</span></div>`).join(''):'<span style="font-size:12px;color:var(--muted)">暂无历史到检阳性报告</span>';
   cardFiles.innerHTML=r.source!=='apply'?'':`<h3 class="sec">补充材料</h3><div style="font-size:12px;margin-bottom:6px">${r.files.length?r.files.join('、'):'尚未上传'}</div><label class="btn ghost sm" style="cursor:pointer">上传客户报告<input type="file" accept=".pdf,.jpg,.png,.zip" style="display:none" onchange="uploadMat(${r.id},this)"></label>`;
@@ -2490,13 +2488,17 @@ const RATIO_PTS={
   2:{"F-01":[["2024",2.40],["2025",3.10],["2026",4.86]],"F-02":[["2024",2.20],["2025",2.80],["2026",3.42]]}
 };
 const HIS_APPT=[
-  {id:"S1",date:"10-20 周二",time:"09:30",dept:"代谢管理门诊",doc:"张明 · 内分泌",room:"建国门 3诊室",left:2},
-  {id:"S2",date:"10-20 周二",time:"10:15",dept:"代谢管理门诊",doc:"刘颖 · 全科",room:"建国门 1诊室",left:4},
-  {id:"S3",date:"10-21 周三",time:"14:00",dept:"代谢管理门诊",doc:"张明 · 内分泌",room:"建国门 3诊室",left:3},
-  {id:"S4",date:"10-20 周二",time:"11:00",dept:"心脑血管门诊",doc:"周宁 · 心内",room:"建国门 5诊室",left:1},
-  {id:"S5",date:"10-22 周四",time:"09:00",dept:"内分泌/甲状腺门诊",doc:"张明 · 内分泌",room:"建国门 2诊室",left:5},
-  {id:"S6",date:"10-22 周四",time:"15:30",dept:"综合健康管理门诊",doc:"刘颖 · 全科",room:"建国门 1诊室",left:6},
-  {id:"S7",date:"10-23 周五",time:"10:40",dept:"呼吸科门诊",doc:"呼吸专科",room:"建国门 6诊室",left:2}
+  {id:"S1",branch:"北京建国门",dept:"代谢管理门诊",doc:"张明 · 内分泌",date:"10-20 周二",time:"09:30",room:"建国门 3诊室",left:2},
+  {id:"S2",branch:"北京建国门",dept:"代谢管理门诊",doc:"刘颖 · 全科",date:"10-20 周二",time:"10:15",room:"建国门 1诊室",left:4},
+  {id:"S3",branch:"北京建国门",dept:"代谢管理门诊",doc:"张明 · 内分泌",date:"10-21 周三",time:"14:00",room:"建国门 3诊室",left:3},
+  {id:"S4",branch:"北京建国门",dept:"心脑血管门诊",doc:"周宁 · 心内",date:"10-20 周二",time:"11:00",room:"建国门 5诊室",left:1},
+  {id:"S5",branch:"北京建国门",dept:"内分泌/甲状腺门诊",doc:"张明 · 内分泌",date:"10-22 周四",time:"09:00",room:"建国门 2诊室",left:5},
+  {id:"S6",branch:"北京建国门",dept:"综合健康管理门诊",doc:"刘颖 · 全科",date:"10-22 周四",time:"15:30",room:"建国门 1诊室",left:6},
+  {id:"S7",branch:"北京建国门",dept:"呼吸科门诊",doc:"王磊 · 呼吸",date:"10-23 周五",time:"10:40",room:"建国门 6诊室",left:2},
+  {id:"S8",branch:"北京亦庄",dept:"代谢管理门诊",doc:"陈磊 · 内分泌",date:"10-21 周三",time:"09:00",room:"亦庄 2诊室",left:3},
+  {id:"S9",branch:"北京亦庄",dept:"综合健康管理门诊",doc:"赵敏 · 全科",date:"10-22 周四",time:"10:30",room:"亦庄 1诊室",left:4},
+  {id:"S10",branch:"上海五角场",dept:"心脑血管门诊",doc:"周宁 · 心内",date:"10-21 周三",time:"15:00",room:"五角场 4诊室",left:2},
+  {id:"S11",branch:"上海五角场",dept:"代谢管理门诊",doc:"孙倩 · 内分泌",date:"10-22 周四",time:"09:40",room:"五角场 2诊室",left:5}
 ];
 let editMatchId=null, editRuleId=null, dictEditName=null, editRatioId=null, BOOK_ID=null, BOOK_ITEM="";
 const CFGLOG=[
@@ -2521,15 +2523,13 @@ function renderAi(){
   const lid=aiLid.value.trim(), i=aiId.value.trim(), n=aiNm.value.trim(), t=aiTp.value;
   const rows=AICFG.filter(a=>(!lid||a.lid.includes(lid))&&(!i||a.id.includes(i))&&(!n||a.nm.includes(n))&&(!t||a.tp===t));
   pageKeep('ai', [lid,i,n,t].join('|'));
-  const tplOpt=v=>['v2.0','v2.1'].map(x=>`<option ${v===x?'selected':''}>${x}</option>`).join('');
   const htmls=rows.map((a,k)=>`<tr>
     <td><input type="checkbox" class="aichk" data-id="${a.id}"></td>
     <td>${k+1}</td><td>${a.lid}</td><td>${a.nm}</td><td>${a.id}</td><td><span class="tag">${a.tp}</span></td>
     <td><label class="tog"><input type="checkbox" ${a.on?'checked':''} onchange="toggleAi('${a.id}',this.checked)"><i></i></label></td>
-    <td><select onchange="setAiTpl('${a.id}',this.value)">${tplOpt(a.tpl)}</select><span class="ph2">2期开发内容</span></td>
     <td><label class="tog"><input type="checkbox" ${a.gd?'checked':''} onchange="toggleGd('${a.id}',this.checked)"><i></i></label></td>
     <td>${a.op}</td><td>${a.t}</td></tr>`);
-  const pg=paintPage('ai', htmls, '<tr><td colspan="11">无匹配检线</td></tr>');
+  const pg=paintPage('ai', htmls, '<tr><td colspan="10">无匹配检线</td></tr>');
   aiBody.innerHTML=pg.body; aiPager.innerHTML=pg.pager;
   const onEl=document.getElementById('aiOn');
   if(onEl) onEl.textContent=AICFG.filter(a=>a.on).length;
@@ -2544,10 +2544,6 @@ function toggleAi(id,v){
 function toggleGd(id,v){
   const a=AICFG.find(x=>x.id===id); a.gd=v; a.t=stampNow();
   toast(a.nm+(v?' 已开启合规护栏':' 已关闭合规护栏'),v?'':'warn');
-}
-function setAiTpl(id,v){
-  const a=AICFG.find(x=>x.id===id); a.tpl=v; a.t=stampNow();
-  toast(a.nm+' 已选择模版 '+v+'（2期开发内容）');
 }
 function batchAi(v){
   const ids=[...document.querySelectorAll('.aichk:checked')].map(x=>x.dataset.id);
@@ -2590,10 +2586,10 @@ function renderMatch(){
     htmls.push(...rows.map(m=>`<tr>
       <td>${i+1}</td><td>${x.abn}</td><td>${x.abnNm}</td><td>${x.dx}</td><td>${x.dxNm}</td><td>${x.t}</td>
       ${m?`<td>${String(m.center).includes('不')?'<span class="tag red">'+m.center+'</span>':m.center}</td>
-        <td>${m.doc}</td><td><span class="tag gray">${m.scope}</span></td>
+        <td><span class="tag gray">${m.scope}</span></td>
         <td>${m.on?'<span class="tag ok">启用</span>':'<span class="tag gray">停用</span>'}</td>
         <td><button class="btn ghost sm" onclick="editMatch('${m.id}')">编辑</button></td>`
-        :`<td>${dash}</td><td>${dash}</td><td>${dash}</td><td>${dash}</td>
+        :`<td>${dash}</td><td>${dash}</td><td>${dash}</td>
         <td><button class="btn ghost sm" onclick="openMatch('${x.abn}','${x.dx}')">配置规则</button></td>`}
     </tr>`));
   });
@@ -2618,7 +2614,7 @@ function editMatch(id){
   fillMAbn();
   if(m.abn) mAbn.value=m.abn;
   syncMdx(m.dx);
-  ensureOpt(mCenter,m.center); ensureOpt(mDoc,m.doc); ensureOpt(mScope,m.scope);
+  ensureOpt(mCenter,m.center); ensureOpt(mScope,m.scope);
   mSt.value=m.on?'启用':'停用';
   mdM.classList.add('on');
 }
@@ -2626,7 +2622,7 @@ function saveMatch(){
   const dx=XUANHU.find(x=>x.abn===mAbn.value && x.dx===mDx.value);
   if(!dx){toast('请选择悬壶关联的异常诊断','warn');return;}
   const prev=editMatchId?MATCH.find(x=>x.id===editMatchId):null;
-  const row={pri:prev?prev.pri:50,nm:prev?prev.nm:dx.dxNm,abn:dx.abn,abnNm:dx.abnNm,dx:dx.dx,dxNm:dx.dxNm,center:mCenter.value,doc:mDoc.value,scope:mScope.value,on:mSt.value==='启用'};
+  const row={pri:prev?prev.pri:50,nm:prev?prev.nm:dx.dxNm,abn:dx.abn,abnNm:dx.abnNm,dx:dx.dx,dxNm:dx.dxNm,center:mCenter.value,doc:prev?prev.doc:'—',scope:mScope.value,on:mSt.value==='启用'};
   if(editMatchId){
     Object.assign(prev, row);
     toast('匹配规则已更新，次日 00:00 生效');
@@ -2921,19 +2917,35 @@ function openBook(item){
   bkWho.textContent=who.name+' · '+who.card+' · '+who.tel;
   bkItem.textContent=item;
   bkOk.style.display='none'; bkGo.disabled=false;
-  const depts=[...new Set(HIS_APPT.map(s=>s.dept))];
+  const branches=[...new Set(HIS_APPT.map(s=>s.branch))];
+  const branch=branches.includes(who.org)?who.org:'北京建国门';
+  bkBranch.innerHTML=branches.map(d=>`<option ${d===branch?'selected':''}>${d}</option>`).join('');
   BOOK_DEPT=item.includes('心脑')?'心脑血管门诊':item.includes('转诊')?'呼吸科门诊':item.includes('甲状腺')?'内分泌/甲状腺门诊':'代谢管理门诊';
-  if(!depts.includes(BOOK_DEPT)) BOOK_DEPT=depts[0];
-  bkDept.innerHTML=depts.map(d=>`<option ${d===BOOK_DEPT?'selected':''}>${d}</option>`).join('');
-  renderSlots();
+  syncBookCenter(BOOK_DEPT);
   mdB.classList.add('on');
 }
+function syncBookCenter(prefer){
+  const list=[...new Set(HIS_APPT.filter(s=>s.branch===bkBranch.value).map(s=>s.dept))];
+  const pick=prefer&&list.includes(prefer)?prefer:list[0];
+  bkDept.innerHTML=list.map(d=>`<option ${d===pick?'selected':''}>${d}</option>`).join('');
+  syncBookDoc();
+}
+function syncBookDoc(){
+  const list=[...new Set(HIS_APPT.filter(s=>s.branch===bkBranch.value&&s.dept===bkDept.value).map(s=>s.doc))];
+  bkDoc.innerHTML=list.map(d=>`<option>${d}</option>`).join('');
+  syncBookSlots();
+}
+function syncBookSlots(){
+  BOOK_ID=null;
+  renderSlots();
+}
 function renderSlots(){
-  const dept=bkDept.value;
-  bkSlots.innerHTML=HIS_APPT.filter(s=>s.dept===dept).map(s=>`<div class="slot ${BOOK_ID===s.id?'on':''}" onclick="pickSlot('${s.id}')">
+  if(bkSrc) bkSrc.textContent='TrakCare HIS · '+bkBranch.value;
+  const rows=HIS_APPT.filter(s=>s.branch===bkBranch.value&&s.dept===bkDept.value&&s.doc===bkDoc.value);
+  bkSlots.innerHTML=rows.map(s=>`<div class="slot ${BOOK_ID===s.id?'on':''}" onclick="pickSlot('${s.id}')">
     <div><b>${s.date} ${s.time}</b><div style="font-size:11px;color:var(--muted)">${s.doc} · ${s.room}</div></div>
     <span class="lm ${s.left?'':'none'}">${s.left?('余 '+s.left):'已满'}</span>
-  </div>`).join('') || '<div class="cc"><div class="d">该门诊暂无号源</div></div>';
+  </div>`).join('') || '<div class="cc"><div class="d">该医生暂无号源</div></div>';
 }
 function pickSlot(id){
   const s=HIS_APPT.find(x=>x.id===id);
@@ -2948,7 +2960,7 @@ function confirmBook(){
   const no='APT'+String(Date.now()).slice(-6);
   const who=Q.find(x=>x.id===CUR);
   bkOk.style.display='block';
-  bkOk.innerHTML=`<b>预约成功，已回写 HIS</b><br>预约号 ${no}<br>${who.name} · ${s.dept}<br>${s.date} ${s.time} · ${s.doc} · ${s.room}<br>项目：${BOOK_ITEM}`;
+  bkOk.innerHTML=`<b>预约成功，已回写 HIS</b><br>预约号 ${no}<br>${who.name} · ${s.branch} · ${s.dept}<br>${s.date} ${s.time} · ${s.doc} · ${s.room}<br>项目：${BOOK_ITEM}`;
   bkGo.disabled=true;
   renderSlots();
   toast('已为 '+who.name+' 完成门诊预约 '+no);

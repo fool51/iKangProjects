@@ -89,7 +89,12 @@ th{background:var(--card);color:var(--blue);font-size:11px;font-weight:700;posit
 #wm span{position:absolute;white-space:nowrap;font-size:15px;font-weight:700;letter-spacing:.5px;color:rgba(29,80,162,.16);transform:rotate(-24deg);transform-origin:left center}
 tbody tr:hover{background:#f7faff}
 .tier{display:inline-block;font-size:10px;font-weight:800;padding:1px 7px;border-radius:3px;color:#fff}
-.tier.T1{background:var(--blue-dk)} .tier.T2{background:var(--blue)} .tier.T3{background:var(--blue-md)} .tier.RK{background:var(--orange)}
+.tier.T1,.tier.lva{background:var(--blue-dk)} .tier.T2,.tier.lvb{background:var(--blue)} .tier.T3,.tier.lvc{background:var(--blue-md)} .tier.lvd{background:#7f97b8} .tier.lve{background:#a8b6c8} .tier.RK{background:var(--orange)}
+.tip{position:relative;display:inline-flex;align-items:center;justify-content:center;width:14px;height:14px;margin-left:4px;border-radius:50%;border:1px solid var(--blue);color:var(--blue);font-size:10px;font-weight:800;font-style:normal;vertical-align:middle;cursor:help;line-height:1}
+.toolbar label .tip,.kv .it span .tip{color:var(--blue)}
+.tip .pop{display:none;position:absolute;left:0;top:18px;z-index:40;width:320px;padding:8px 10px;background:#fff;color:var(--text);font-size:11px;font-weight:500;line-height:1.6;text-align:left;border:1px solid var(--line);border-radius:6px;box-shadow:0 8px 20px rgba(20,30,45,.15);white-space:normal}
+.kv .it span .tip .pop,.toolbar label .tip .pop{color:var(--text);font-size:11px;font-weight:500}
+.tip:hover .pop,.tip:focus .pop,.tip:focus-within .pop{display:block}
 .tag{display:inline-block;font-size:10px;padding:1px 7px;border-radius:3px;background:var(--blue-pale);color:var(--blue);font-weight:700}
 .tag.warn{background:var(--orange-pale);color:var(--orange)}
 .tag.ok{background:var(--green-pale);color:var(--green)}
@@ -345,6 +350,28 @@ p.hint{font-size:11.5px;color:var(--muted);margin:-2px 0 10px}
 .trig .hd{display:flex;align-items:center;gap:6px;font-size:12px;font-weight:700;color:var(--blue-dk);margin-bottom:6px}
 .trig .hd input{margin:0}
 .book-ok{background:var(--green-pale);border:1px solid #cfe6d9;border-radius:6px;padding:10px 12px;margin-top:10px;font-size:12px;color:var(--green)}
+#mdB .md{width:980px}
+#mdB .bd{max-height:74vh;overflow:auto}
+.calbar{display:flex;align-items:center;gap:8px;margin-top:10px}
+.calbar .rng{font-size:11px;color:var(--muted);margin-right:auto}
+.bcal{width:100%;border-collapse:collapse;margin-top:6px;font-size:12px;table-layout:fixed}
+.bcal th{background:#e7f0fb;color:#243044;font-weight:700;padding:6px 2px;text-align:center;border:1px solid #d5e2f2}
+.bcal th.sub{font-weight:600;color:#3d4b5e;background:#f4f8fd}
+.bcal td{border:1px solid #d5e2f2;text-align:center;height:40px;background:#fff}
+.bcal td.hit{cursor:pointer;background:#f3faf5}
+.bcal td.hit:hover{background:#e5f6ea}
+.bcal td.on{box-shadow:inset 0 0 0 2px #2f9e62;background:#e9f8ee}
+.bcal td.off{color:#9aa3af;background:#fafafa}
+.bcal tr.gap td{height:8px;border:0;background:transparent;padding:0}
+.bknew{margin-top:10px;border:1px solid var(--line);border-radius:6px;overflow:hidden}
+.bknew .cap{padding:8px 10px;font-size:12px;background:var(--card);color:var(--blue-dk);font-weight:700}
+.bknew table{width:100%;border-collapse:collapse;font-size:12px}
+.bknew th{background:#1d50a2;color:#fff;font-weight:700;padding:5px 8px;text-align:left}
+.bknew td{border-top:1px solid var(--line);padding:5px 8px}
+.bknew td.y{color:var(--orange);font-weight:800}
+.bkpop{margin-top:8px;border:1px solid var(--blue);border-radius:6px;padding:8px 10px;background:#fff}
+.bkpop .ph{display:flex;align-items:center;font-size:12px;font-weight:800;color:var(--blue-dk);margin-bottom:6px}
+.bkpop .ph button{margin-left:auto;border:0;background:transparent;font-size:16px;cursor:pointer;color:var(--muted)}
 @media(max-width:1100px){.grid2,.ai-wrap,.stats,.prev,.formg,.dhead,.arch,.seg3,.seg2,.grd,.kv{grid-template-columns:1fr}
   .sumg{grid-template-columns:1fr 1fr}}
 </style>
@@ -456,6 +483,7 @@ p.hint{font-size:11.5px;color:var(--muted);margin:-2px 0 10px}
     <div class="mod" data-p="p6" data-ws="clinic"><span class="ic">06</span>电话外呼<span class="sub">跳转至外呼系统</span></div>
     <div class="mod" data-p="p10" data-ws="ops" style="display:none"><span class="ic">01</span>客群目标设定</div>
     <div class="mod" data-p="p11" data-ws="ops" style="display:none"><span class="ic">02</span>解读与分源转化</div>
+    <div class="mod" data-p="p12" data-ws="ops" style="display:none"><span class="ic">03</span>绩效看板</div>
     <div class="mod" data-p="c1" data-ws="rule" style="display:none"><span class="ic">01</span>AI 开关</div>
     <div class="mod" data-p="c2" data-ws="rule" style="display:none"><span class="ic">02</span>客户匹配规则</div>
     <div class="mod" data-p="c3" data-ws="rule" style="display:none"><span class="ic">03</span>推荐规则</div>
@@ -474,11 +502,21 @@ p.hint{font-size:11.5px;color:var(--muted);margin:-2px 0 10px}
       <div class="banner">健康咨询师推送解读任务之前，分院到检B2C先取预约单里的客户，再按客户匹配规则和客群字段规则筛选。主动申请在本页导入，不并入分院到检B2C。</div>
       <div class="toolbar">
         <label>来源</label>
-        <select id="scSrc" onchange="renderScreen()"><option value="">全部</option><option value="rule">分院到检B2C</option><option value="apply">主动申请</option></select>
+        <select id="scSrc"><option value="">全部</option><option value="rule">分院到检B2C</option><option value="apply">主动申请</option></select>
         <label>客群</label>
-        <select id="scSeg" onchange="renderScreen()"><option value="">全部</option><option>高管</option><option>贵宾</option><option>银保</option><option>企业客户</option></select>
+        <select id="scSeg"><option value="">全部</option><option>高管</option><option>贵宾</option><option>银保</option><option>企业客户</option></select>
+        <label>项目客源</label>
+        <select id="scProj"><option value="">全部</option><option>黑金</option><option>君安</option><option>臻享</option><option>白金</option><option>贵宾</option><option>VIP</option></select>
+        <label>检线</label>
+        <select id="scOrg"><option value="">全部权限内检线</option></select>
+        <label>消费等级<span class="tip" tabindex="0" data-tip="tier">i</span></label>
+        <select id="scTier"><option value="">全部</option><option>A级</option><option>B级</option><option>C级</option><option>D级</option><option>E级</option></select>
+        <label>加项活跃度<span class="tip" tabindex="0" data-tip="act">i</span></label>
+        <select id="scAct"><option value="">全部</option><option>A级</option><option>B级</option><option>C级</option><option>D级</option></select>
+        <button class="btn ghost sm" onclick="renderScreen()">筛选</button>
         <span style="margin-left:auto"></span>
         <label class="btn or sm" style="cursor:pointer">导入客户名单<input type="file" id="applyFile" accept=".xlsx,.xls,.csv" style="display:none" onchange="importApplyList(this)"></label>
+        <button class="btn ghost sm" onclick="downloadApplyTpl()">导入模板</button>
       </div>
       <div class="tbl-wrap">
         <table>
@@ -520,14 +558,21 @@ p.hint{font-size:11.5px;color:var(--muted);margin:-2px 0 10px}
     <h3 class="sec">高客解读列表</h3>
     <div class="banner" id="lineBan">登录日 2026-10-21。只显示「客户筛选与推送」中已预约到当天、且检线在本人权限内的客户。</div>
     <div class="toolbar">
-      <label>消费分层</label>
-      <select id="fTier"><option value="">全部</option><option>T1</option><option>T2</option><option>T3</option></select>
-      <label>阳性指标数 ≥</label>
-      <select id="fPos"><option value="0">不限</option><option value="3">3</option><option value="5">5</option><option value="7">7</option></select>
+      <label>来源</label>
+      <select id="qSrc"><option value="">全部</option><option value="rule">分院到检B2C</option><option value="apply">主动申请</option></select>
+      <label>客群</label>
+      <select id="qSeg"><option value="">全部</option><option>高管</option><option>贵宾</option><option>银保</option><option>企业客户</option></select>
+      <label>项目客源</label>
+      <select id="qProj"><option value="">全部</option><option>黑金</option><option>君安</option><option>臻享</option><option>白金</option><option>贵宾</option><option>VIP</option></select>
       <label>检线</label>
       <select id="fOrg"><option value="">全部权限内检线</option></select>
+      <label>消费等级<span class="tip" tabindex="0" data-tip="tier">i</span></label>
+      <select id="fTier"><option value="">全部</option><option>A级</option><option>B级</option><option>C级</option><option>D级</option><option>E级</option></select>
+      <label>加项活跃度<span class="tip" tabindex="0" data-tip="act">i</span></label>
+      <select id="qAct"><option value="">全部</option><option>A级</option><option>B级</option><option>C级</option><option>D级</option></select>
+      <label>阳性指标数 ≥</label>
+      <select id="fPos"><option value="0">不限</option><option value="3">3</option><option value="5">5</option><option value="7">7</option></select>
       <button class="btn ghost sm" onclick="renderQueue()">筛选</button>
-      <span style="margin-left:auto"></span>
     </div>
 
     <div class="tbl-wrap">
@@ -660,7 +705,6 @@ p.hint{font-size:11.5px;color:var(--muted);margin:-2px 0 10px}
           <select id="fWay" style="width:100%"><option>门诊面对面</option><option>电话外呼</option><option>视频问诊</option></select>
         </div>
         <div><label>解读用时</label><input type="text" id="fDur" value="00:00:15" readonly style="width:100%"></div>
-        <div><label>短信通知</label><div style="padding-top:4px"><button class="btn ghost sm" onclick="toast('解读完成短信已发送（模拟）')">发送短信</button></div></div>
         <div class="full"><label><i>*</i>解读结果</label>
           <div class="chk">
             <label><input type="checkbox" checked> 体检报告全面解读</label>
@@ -744,7 +788,7 @@ p.hint{font-size:11.5px;color:var(--muted);margin:-2px 0 10px}
 
     </div>
     <div class="seg2" id="tgSegs"></div>
-    <p class="note">健康咨询师推送解读任务之前，圈定范围先取预约单，再套字段规则。默认规则为客群来源、本次到检金额、本次加项金额；可继续新增字段，枚举值来自客户标签（如活跃客户）。同一字段多条规则按「或」命中，不同字段按「且」同时满足。没有预约单的客户不计入命中。主动申请不在这里配置，也不参与规则圈定。人群提交后仍由区域管理审核，审核通过后推送老系统屏蔽。华北按当前登录检线内、且在预约单中的演示客户实时计算，其他区域为周期快照。</p>
+    <p class="note">健康咨询师推送解读任务之前，圈定范围先取预约单，再套字段规则。默认规则为客群来源、本次到检金额、本次加项金额；可继续新增字段，枚举值来自客户标签（如加项活跃度）。同一字段多条规则按「或」命中，不同字段按「且」同时满足。没有预约单的客户不计入命中。主动申请不在这里配置，也不参与规则圈定。人群提交后仍由区域管理审核，审核通过后推送老系统屏蔽。华北按当前登录检线内、且在预约单中的演示客户实时计算，其他区域为周期快照。</p>
   </div>
 
   <!-- ============ 11 完成进度 ============ -->
@@ -775,49 +819,38 @@ p.hint{font-size:11.5px;color:var(--muted);margin:-2px 0 10px}
     <p class="note">指标按当前数据实时运算。规则圈定客户的成交记入 B2C 转化率。从「客户筛选与推送」导入的主动申请客源不计入 B2C，单独记为主动转化。区域行下的二级列表是该区域关联检线，表头与区域相同。</p>
   </div>
 
-  <!-- ============ 12 加项与医生转化 ============ -->
+  <!-- ============ 03 绩效看板 ============ -->
   <div class="pane" id="p12">
-    <div class="stats">
-      <div class="st"><b id="adRead">—</b><span>解读人次</span></div>
-      <div class="st or"><b id="adItems">—</b><span>加项件数</span></div>
-      <div class="st"><b id="adAmt">—</b><span>加项金额</span></div>
-      <div class="st gr"><b id="adRate">—</b><span>B2C 平均转化率</span></div>
-    </div>
-    <h3 class="sec">报告解读加项 · B2C 与主动转化</h3>
+    <h3 class="sec">绩效看板</h3>
     <div class="toolbar">
       <label>区域</label>
       <select id="adRegion" onchange="renderAddon()"><option value="">全部区域</option></select>
+      <label>检线</label>
+      <select id="adOrg" onchange="renderAddon()"><option value="">全部检线</option></select>
+      <label>角色</label>
+      <select id="adRole" onchange="renderAddon()">
+        <option value="">全部</option>
+        <option>健康咨询师</option>
+        <option>解读医生</option>
+      </select>
       <label>达标线</label>
       <input type="text" id="adLine" value="30" style="width:52px" onchange="renderAddon()">
       <span style="font-size:11px;color:var(--muted)">%</span>
       <label style="display:flex;align-items:center;gap:4px"><input type="checkbox" id="adOnly" onchange="renderAddon()"> 只看未达标</label>
-      <button class="btn ghost sm" onclick="toast('加项与转化明细已导出（模拟）')">导出报表</button>
-      <span style="margin-left:auto;font-size:11px;color:var(--muted)">B2C 转化率 = B2C 转化人次 ÷ 规则圈定解读人次。主动申请单独计算。</span>
+      <button class="btn ghost sm" onclick="toast('绩效明细已导出（模拟）')">导出报表</button>
     </div>
-    <div class="grid2">
-      <div class="box">
-        <h4>加项结构<span class="src" id="adMixSrc">全集团 · 2026年10月</span></h4>
-        <div class="hlist" id="adMix"></div>
-      </div>
-      <div class="coach">
-        <h4>医生转化率管理 · 辅导名单</h4>
-        <ul id="adCoach"></ul>
-        <p style="font-size:11px;color:var(--muted);margin-top:6px">低于达标线的医生可加入辅导。名单同步区域运营周会，不直接改医生排班。</p>
-      </div>
-    </div>
-    <div class="tbl-wrap" style="margin-top:11px;max-height:360px">
+    <div class="tbl-wrap" style="margin-top:11px">
       <table>
         <thead><tr>
-          <th>医生</th><th>专科</th><th>区域 / 分院</th>
-          <th>解读人次</th><th>B2C转化人次</th><th>B2C转化率</th>
-          <th>主动解读</th><th>主动转化人次</th><th>主动转化率</th>
-          <th>加项件数</th><th>加项金额</th><th>件均</th><th>环比</th><th>管理</th>
+          <th>医生姓名</th><th>角色</th><th>所属区域</th><th>检线</th>
+          <th>服务人次</th><th>B2C转化人次</th><th>B2C转化率</th>
+          <th>主动服务</th><th>主动转化人次</th><th>主动转化率</th>
         </tr></thead>
         <tbody id="adBody"></tbody>
       </table>
     </div>
     <div id="adPager"></div>
-    <p class="note">规则圈定客户的成交计入 B2C 转化率。主动申请客源单独计入主动转化率，不并进 B2C。专科转诊两种口径都不计转化。本表不再展示转化完成和达标状态。</p>
+    <p class="note">只展示系统角色为健康咨询师、解读医生的人员。B2C 转化率 = B2C 转化人次 ÷ 服务人次。主动申请单独计入主动转化率，不并进 B2C。未达标按 B2C 转化率低于达标线筛选。</p>
   </div>
 
   <!-- ============ 解读规则配置（自悬壶配置中心迁入） ============ -->
@@ -1162,7 +1195,9 @@ p.hint{font-size:11.5px;color:var(--muted);margin:-2px 0 10px}
       <label>门诊医生</label>
       <select id="bkDoc" onchange="syncBookSlots()"></select>
     </div>
+    <div id="bkNew"></div>
     <div id="bkSlots"></div>
+    <div id="bkPop" class="bkpop" style="display:none"></div>
     <div class="book-ok" id="bkOk" style="display:none"></div>
   </div>
   <div class="ft">
@@ -1205,18 +1240,18 @@ const DOCS=[
 ];
 const LOGIN_DAY='2026-10-21';
 const Q=[
- {id:1,name:"王雅琴",sex:"女",age:52,card:"IK202600183",org:"北京建国门",tier:"T1",seg:"高管",active:"高活跃",orgType:"集团企业",pkgAmt:6800,addonAmt:2400,histAddon:18600,visits:6,company:"远景控股集团",pos:7,rule:"M-01 代谢主线",center:"代谢管理门诊",tel:"138****1028",source:"rule",appt:{date:"2026-10-21",slot:"09:00–10:00"},files:[]},
- {id:2,name:"周建国",sex:"男",age:61,card:"IK202601033",org:"北京建国门",tier:"T1",seg:"贵宾",active:"高活跃",orgType:"个人",pkgAmt:7500,addonAmt:1800,histAddon:12400,visits:8,company:"个人客户",pos:9,rule:"M-02 心脑血管",center:"心脑血管门诊",tel:"139****6631",source:"rule",ikangReady:false,appt:{date:"2026-10-21",slot:"14:00–15:00"},files:[]},
- {id:3,name:"陈志远",sex:"男",age:47,card:"IK202600471",org:"上海五角场",tier:"T1",seg:"高管",active:"中活跃",orgType:"集团企业",pkgAmt:5200,addonAmt:2100,histAddon:9600,visits:4,company:"浦江实业",pos:5,rule:"M-01 代谢主线",center:"代谢管理门诊",tel:"136****2290",source:"rule",appt:null,files:[]},
- {id:4,name:"孙丽华",sex:"女",age:56,card:"IK202601502",org:"南京新街口",tier:"T2",seg:"银保",active:"中活跃",orgType:"保险公司",pkgAmt:3200,addonAmt:1200,histAddon:5400,visits:3,company:"安联人寿",pos:6,rule:"M-03 甲状腺",center:"内分泌门诊",tel:"137****4418",source:"rule",appt:null,files:[]},
- {id:5,name:"李婷",sex:"女",age:38,card:"IK202600892",org:"杭州黄龙",tier:"T2",seg:"企业客户",active:"低活跃",orgType:"集团企业",pkgAmt:2600,addonAmt:1050,histAddon:2100,visits:2,company:"网易杭州",pos:4,rule:"M-05 综合管理",center:"综合健康管理门诊",tel:"158****7733",source:"rule",appt:null,files:[]},
- {id:6,name:"吴敏",sex:"女",age:44,card:"IK202601245",org:"成都天府",tier:"T2",seg:"贵宾",active:"高活跃",orgType:"银行",pkgAmt:2200,addonAmt:900,histAddon:4300,visits:5,company:"招商银行成都",pos:3,rule:"M-02 心脑血管",center:"心脑血管门诊",tel:"186****0912",source:"rule",appt:null,files:[]},
- {id:7,name:"赵晓峰",sex:"男",age:35,card:"IK202601388",org:"深圳福田",tier:"T3",seg:"企业客户",active:"沉默",orgType:"集团企业",pkgAmt:1500,addonAmt:600,histAddon:800,visits:1,company:"斯达领科",pos:3,rule:"M-01 代谢主线",center:"代谢管理门诊",tel:"135****5506",source:"rule",appt:null,files:[]},
- {id:8,name:"郑浩",sex:"男",age:41,card:"IK202601677",org:"武汉光谷",tier:"T3",seg:"企业客户",active:"中活跃",orgType:"集团企业",pkgAmt:1200,addonAmt:520,histAddon:600,visits:1,company:"光谷生物",pos:2,rule:"主动申请",center:"综合健康管理门诊",tel:"133****8841",source:"apply",appt:null,files:[]},
- {id:9,name:"韩雪",sex:"女",age:49,card:"IK202601802",org:"北京建国门",tier:"T1",seg:"银保",active:"高活跃",orgType:"保险公司",pkgAmt:4200,addonAmt:960,histAddon:7200,visits:4,company:"泰康人寿北京",pos:5,rule:"M-03 甲状腺",center:"内分泌门诊",tel:"136****7712",source:"rule",appt:null,files:[]},
- {id:10,name:"马超",sex:"男",age:44,card:"IK202601915",org:"北京建国门",tier:"T2",seg:"高管",active:"中活跃",orgType:"集团企业",pkgAmt:2600,addonAmt:300,histAddon:1500,visits:2,company:"首钢基金",pos:2,rule:"M-05 综合管理",center:"综合健康管理门诊",tel:"139****2204",source:"rule",appt:null,files:[]},
- {id:11,name:"林晓雯",sex:"女",age:43,card:"IK202601966",org:"北京建国门",tier:"T2",seg:"企业客户",active:"高活跃",orgType:"集团企业",pkgAmt:0,addonAmt:0,histAddon:4200,visits:3,company:"客户主动预约",pos:4,rule:"主动申请",center:"综合健康管理门诊",tel:"131****9088",source:"apply",appt:null,files:["外院生化报告.pdf"]},
- {id:12,name:"何倩",sex:"女",age:46,card:"IK202602088",org:"北京建国门",tier:"T1",seg:"高管",active:"高活跃",orgType:"集团企业",pkgAmt:5600,addonAmt:1200,histAddon:6400,visits:3,company:"华润集团",pos:4,rule:"M-01 代谢主线",center:"代谢管理门诊",tel:"138****6620",source:"rule",appt:null,files:[]}
+ {id:1,name:"王雅琴",sex:"女",age:52,card:"IK202600183",org:"北京建国门",tier:"A级",seg:"高管",active:"A级",projSrc:"黑金",orgType:"集团企业",pkgAmt:6800,addonAmt:2400,histAddon:18600,visits:6,company:"远景控股集团",pos:7,rule:"M-01 代谢主线",center:"代谢管理门诊",tel:"138****1028",source:"rule",appt:{date:"2026-10-21",slot:"09:00–10:00"},files:[]},
+ {id:2,name:"周建国",sex:"男",age:61,card:"IK202601033",org:"北京建国门",tier:"A级",seg:"贵宾",active:"A级",projSrc:"君安",orgType:"个人",pkgAmt:7500,addonAmt:1800,histAddon:12400,visits:8,company:"个人客户",pos:9,rule:"M-02 心脑血管",center:"心脑血管门诊",tel:"139****6631",source:"rule",ikangReady:false,trakRow:"RID2026102102",appt:{date:"2026-10-21",slot:"14:00–15:00"},files:[]},
+ {id:3,name:"陈志远",sex:"男",age:47,card:"IK202600471",org:"上海五角场",tier:"B级",seg:"高管",active:"B级",projSrc:"臻享",orgType:"集团企业",pkgAmt:5200,addonAmt:2100,histAddon:9600,visits:4,company:"浦江实业",pos:5,rule:"M-01 代谢主线",center:"代谢管理门诊",tel:"136****2290",source:"rule",appt:null,files:[]},
+ {id:4,name:"孙丽华",sex:"女",age:56,card:"IK202601502",org:"南京新街口",tier:"C级",seg:"银保",active:"B级",projSrc:"白金",orgType:"保险公司",pkgAmt:3200,addonAmt:1200,histAddon:5400,visits:3,company:"安联人寿",pos:6,rule:"M-03 甲状腺",center:"内分泌门诊",tel:"137****4418",source:"rule",appt:null,files:[]},
+ {id:5,name:"李婷",sex:"女",age:38,card:"IK202600892",org:"杭州黄龙",tier:"C级",seg:"企业客户",active:"C级",projSrc:"贵宾",orgType:"集团企业",pkgAmt:2600,addonAmt:1050,histAddon:2100,visits:2,company:"网易杭州",pos:4,rule:"M-05 综合管理",center:"综合健康管理门诊",tel:"158****7733",source:"rule",appt:null,files:[]},
+ {id:6,name:"吴敏",sex:"女",age:44,card:"IK202601245",org:"成都天府",tier:"D级",seg:"贵宾",active:"A级",projSrc:"VIP",orgType:"银行",pkgAmt:2200,addonAmt:900,histAddon:4300,visits:5,company:"招商银行成都",pos:3,rule:"M-02 心脑血管",center:"心脑血管门诊",tel:"186****0912",source:"rule",appt:null,files:[]},
+ {id:7,name:"赵晓峰",sex:"男",age:35,card:"IK202601388",org:"深圳福田",tier:"E级",seg:"企业客户",active:"D级",projSrc:"臻享",orgType:"集团企业",pkgAmt:1500,addonAmt:600,histAddon:800,visits:1,company:"斯达领科",pos:3,rule:"M-01 代谢主线",center:"代谢管理门诊",tel:"135****5506",source:"rule",appt:null,files:[]},
+ {id:8,name:"郑浩",sex:"男",age:41,card:"IK202601677",org:"武汉光谷",tier:"E级",seg:"企业客户",active:"B级",projSrc:"黑金",orgType:"集团企业",pkgAmt:1200,addonAmt:520,histAddon:600,visits:1,company:"光谷生物",pos:2,rule:"主动申请",center:"综合健康管理门诊",tel:"133****8841",source:"apply",appt:null,files:[]},
+ {id:9,name:"韩雪",sex:"女",age:49,card:"IK202601802",org:"北京建国门",tier:"B级",seg:"银保",active:"A级",projSrc:"白金",orgType:"保险公司",pkgAmt:4200,addonAmt:960,histAddon:7200,visits:4,company:"泰康人寿北京",pos:5,rule:"M-03 甲状腺",center:"内分泌门诊",tel:"136****7712",source:"rule",appt:null,files:[]},
+ {id:10,name:"马超",sex:"男",age:44,card:"IK202601915",org:"北京建国门",tier:"C级",seg:"高管",active:"B级",projSrc:"贵宾",orgType:"集团企业",pkgAmt:2600,addonAmt:300,histAddon:1500,visits:2,company:"首钢基金",pos:2,rule:"M-05 综合管理",center:"综合健康管理门诊",tel:"139****2204",source:"rule",appt:null,files:[]},
+ {id:11,name:"林晓雯",sex:"女",age:43,card:"IK202601966",org:"北京建国门",tier:"D级",seg:"企业客户",active:"A级",projSrc:"VIP",orgType:"集团企业",pkgAmt:0,addonAmt:0,histAddon:4200,visits:3,company:"客户主动预约",pos:4,rule:"主动申请",center:"综合健康管理门诊",tel:"131****9088",source:"apply",appt:null,files:["外院生化报告.pdf"]},
+ {id:12,name:"何倩",sex:"女",age:46,card:"IK202602088",org:"北京建国门",tier:"A级",seg:"高管",active:"A级",projSrc:"君安",orgType:"集团企业",pkgAmt:5600,addonAmt:1200,histAddon:6400,visits:3,company:"华润集团",pos:4,rule:"M-01 代谢主线",center:"代谢管理门诊",tel:"138****6620",source:"rule",appt:null,files:[]}
 ];
 const ORDERS=[
  {no:"YY20261018001",card:"IK202600183",name:"王雅琴",date:"2026-10-18",org:"北京建国门"},
@@ -1356,7 +1391,7 @@ const RECS={
   {t:"199 复查包",tag:"检后转化入口",why:"规则 R-01：代谢/血脂/脂肪肝需 3 个月复评。",price:"¥199",sp:"您这次的血糖、血脂和脂肪肝都属于现在还能扭转的阶段，关键是三个月后看变化趋势，而不是等到明年体检。门诊有一个 199 的复查包，含重点项目复查，当天免挂号，仍由我给您做完整解读和方案调整。"},
   {t:"维生素 D3 + 镁 / Omega-3",tag:"营养素",why:"规则 R-02 / R-03：25-OH-D 38、hsCRP 2.9。",price:"¥380 / 月",sp:"您的维生素 D 只有 38，理想在 80 以上。它不只是骨头的问题，跟免疫状态、情绪和现在这个轻度炎症水平都有关系。配合 Omega-3 一起补，对甘油三酯也有帮助，三个月后按化验值再调整。"},
   {t:"胰岛素抵抗深度评估包",tag:"深度筛查",why:"规则 R-04：HOMA-IR 3.58 超阈值。",price:"¥880",sp:"血糖还没到糖尿病标准，但胰岛素已经偏高，说明身体在用更多的胰岛素维持血糖正常，属于早期信号。建议做糖耐量加胰岛素释放试验，把曲线看清楚，干预才有针对性。"},
-  {t:"代谢管理门诊套餐（3 个月）",tag:"门诊套餐",why:"规则 R-05：T1 + 代谢主线明确。",price:"¥2,980",sp:"单靠一次解读其实不够，关键在后面三个月怎么管。我们有代谢管理的门诊方案，含定期随访、营养运动处方调整和中间的指标复查，目标是把血糖拉回 5.6 以下。"}
+  {t:"代谢管理门诊套餐（3 个月）",tag:"门诊套餐",why:"规则 R-05：A级 + 代谢主线明确。",price:"¥2,980",sp:"单靠一次解读其实不够，关键在后面三个月怎么管。我们有代谢管理的门诊方案，含定期随访、营养运动处方调整和中间的指标复查，目标是把血糖拉回 5.6 以下。"}
  ],
  2:[
   {t:"199 复查包",tag:"检后转化入口",why:"规则 R-01：血糖需复核、血脂需复评。",price:"¥199",sp:"您的空腹血糖这次是 7.2，已经到了需要复核确诊的水平，不能只看一次。建议三个月内复查血糖和血脂，199 复查包含这些项目，当天免挂号。"},
@@ -1420,7 +1455,7 @@ function setWs(ws){
   wsHint.textContent=ws==='clinic'
     ?'医生工作台 · 患者上下文来自 TrakCare'
     :ws==='ops'
-    ?'区域运营 · 目标上传与完成对照'
+    ?'区域运营 · 目标上传、完成对照与绩效看板'
     :ws==='log'
     ?'解读记录查询'
     :'集团运营 · 匹配、推荐、AI 解读模版与护栏在此配置';
@@ -1481,10 +1516,11 @@ function todayBooked(){
   return Q.filter(r=>lines.includes(r.org)&&r.appt&&r.appt.date===LOGIN_DAY);
 }
 function renderQueue(){
+  const src=qSrc.value, seg=qSeg.value, proj=qProj.value, act=qAct.value;
   const t=fTier.value,p=+fPos.value,o=fOrg.value;
   const lines=myLines();
-  const rows=todayBooked().filter(r=>(!t||r.tier===t)&&(r.pos>=p)&&(!o||r.org===o));
-  pageKeep('q', [t,p,o].join('|'));
+  const rows=todayBooked().filter(r=>(!src||r.source===src)&&(!seg||r.seg===seg)&&(!proj||r.projSrc===proj)&&(!t||r.tier===t)&&(!act||r.active===act)&&(r.pos>=p)&&(!o||r.org===o));
+  pageKeep('q', [src,seg,proj,t,act,p,o].join('|'));
   const htmls=rows.map(r=>`<tr>
     <td><b>${r.name}</b></td><td>${r.sex} / ${r.age}</td><td>${r.card}</td><td>${r.org}</td>
     <td>${r.seg}</td>
@@ -1505,9 +1541,12 @@ function myLines(){
 }
 function fillOrgFilter(){
   const ls=myLines();
-  const cur=fOrg.value;
-  fOrg.innerHTML='<option value="">全部权限内检线</option>'+ls.map(o=>`<option>${o}</option>`).join('');
-  if(ls.includes(cur)) fOrg.value=cur;
+  [fOrg, document.getElementById('scOrg')].forEach(sel=>{
+    if(!sel) return;
+    const cur=sel.value;
+    sel.innerHTML='<option value="">全部权限内检线</option>'+ls.map(o=>`<option>${o}</option>`).join('');
+    if(ls.includes(cur)) sel.value=cur;
+  });
 }
 function jump(id){pSel.value=id; loadPatient(id); go('p2');}
 
@@ -1524,7 +1563,7 @@ function loadPatient(id){
   const r=Q.find(x=>x.id===CUR);
   if(!r) return;
   ctxName.textContent=r.name; ctxCard.textContent=r.card; ctxTel.textContent=r.tel;
-  ctxTier.textContent=r.seg; ctxTier.className='tier '+(r.tier||'T2'); ctxPos.textContent=r.pos+' 项';
+  ctxTier.textContent=r.seg; ctxTier.className='tier '+({A级:'lva',B级:'lvb',C级:'lvc',D级:'lvd',E级:'lve'}[r.tier]||'lvc'); ctxPos.textContent=r.pos+' 项';
   THIRDID=null;
   renderPreview();
   ['a1','a2','a3','a4'].forEach(k=>document.getElementById(k).textContent='—');
@@ -1861,11 +1900,16 @@ function showLog(i){
 
 
 /* ---------------- 00 客户筛选与推送 ---------------- */
+const TIER_TIP='消费等级说明（括号里为客户累计消费金额区间）：<br>- A级：极高消费，定制/VIP<br>- B级：高消费，高端套餐<br>- C级：中等消费，进阶套餐<br>- D级：中低消费，标准套餐<br>- E级：最低消费群，基础套餐';
+const ACT_TIP='加项活跃度说明：<br>- A级：高活跃度，高自费意愿<br>- B级：中高活跃度，中高自费意愿<br>- C级：中低活跃度，中低自费意愿<br>- D级：低活跃度，低自费意愿';
+function infoTip(key){
+  return `<span class="tip" tabindex="0">i<span class="pop">${key==='tier'?TIER_TIP:ACT_TIP}</span></span>`;
+}
 const TAGS={
   '客群来源':{type:'enum',options:['高管','贵宾','银保','企业客户']},
-  '活跃客户':{type:'enum',options:['高活跃','中活跃','低活跃','沉默']},
+  '加项活跃度':{type:'enum',options:['A级','B级','C级','D级']},
   '单位性质':{type:'enum',options:['集团企业','保险公司','银行','个人']},
-  '消费分层':{type:'enum',options:['T1','T2','T3']},
+  '消费等级':{type:'enum',options:['A级','B级','C级','D级','E级']},
   '本次到检金额':{type:'num'},
   '本次加项金额':{type:'num'},
   '历史加项金额':{type:'num'},
@@ -1874,7 +1918,7 @@ const TAGS={
 };
 function personVal(p,field){
   return ({
-    '客群来源':p.seg,'活跃客户':p.active,'单位性质':p.orgType,'消费分层':p.tier,
+    '客群来源':p.seg,'加项活跃度':p.active,'单位性质':p.orgType,'消费等级':p.tier,
     '本次到检金额':p.pkgAmt,'本次加项金额':p.addonAmt,'历史加项金额':p.histAddon,
     '历史到检次数':p.visits,'阳性指标数':p.pos
   })[field];
@@ -1903,11 +1947,19 @@ function screenRows(){
   const lines=myLines();
   const src=document.getElementById('scSrc')?scSrc.value:'';
   const seg=document.getElementById('scSeg')?scSeg.value:'';
+  const proj=document.getElementById('scProj')?scProj.value:'';
+  const org=document.getElementById('scOrg')?scOrg.value:'';
+  const tier=document.getElementById('scTier')?scTier.value:'';
+  const act=document.getElementById('scAct')?scAct.value:'';
   const rules=(OPS_TG.find(r=>r.id==='hb')||{rules:[]}).rules;
   return Q.filter(p=>{
     if(!lines.includes(p.org)) return false;
     if(src && p.source!==src) return false;
     if(seg && p.seg!==seg) return false;
+    if(proj && p.projSrc!==proj) return false;
+    if(org && p.org!==org) return false;
+    if(tier && p.tier!==tier) return false;
+    if(act && p.active!==act) return false;
     if(p.source==='apply') return true;
     return !!orderOf(p) && matchRules(p, rules);
   });
@@ -1916,7 +1968,7 @@ function renderScreen(){
   if(!document.getElementById('scBody')) return;
   const rows=screenRows();
   scCnt.textContent=rows.length;
-  pageKeep('sc', [(document.getElementById('scSrc')?scSrc.value:''),(document.getElementById('scSeg')?scSeg.value:'')].join('|'));
+  pageKeep('sc', [scSrc.value,scSeg.value,scProj.value,scOrg.value,scTier.value,scAct.value].join('|'));
   const htmls=rows.map(r=>{
     const od=orderOf(r);
     const ap=r.appt?(r.appt.date+' '+r.appt.slot):'<span class="tag gray">未预约</span>';
@@ -1945,14 +1997,14 @@ function openCard(id){
   cardTitle.textContent=r.name+' · 客户卡';
   cardPush.dataset.id=id;
   const items=[
-    ['性别',r.sex],['年龄',r.age+' 岁'],['客群',r.seg],['项目客源', r.source==='apply'?'主动预约':({集团企业:'企业团检',个人:'个检',保险公司:'银保团检',银行:'银行团检'}[r.orgType]||r.orgType||'—')],['消费分层',r.tier],
+    ['性别',r.sex],['年龄',r.age+' 岁'],['客群',r.seg],['项目客源', r.projSrc||'—'],['消费等级'+infoTip('tier'),r.tier],
     ['本次体检套餐价', r.pkgAmt?yuan(r.pkgAmt):'—'],
     ['本次加项价格', r.addonAmt?yuan(r.addonAmt):'—'],
     ['历史加项金额', yuan(r.histAddon)],
     ['历史到检次数', r.visits+' 次'],
     ['联系电话', r.tel],
     ['单位', r.company],
-    ['活跃客户', r.active],
+    ['加项活跃度'+infoTip('act'), r.active],
     ['来源', r.source==='apply'?'主动申请':'分院到检B2C'],
     ['预约单号', orderOf(r)?orderOf(r).no:'—'],
     ['预约到检', orderOf(r)?orderOf(r).date:'—'],
@@ -2040,7 +2092,7 @@ function importApplyList(inp){
   if(!f) return;
   APPLY_N++;
   const id=100+APPLY_N;
-  Q.push({id,name:'导入客户'+APPLY_N,sex:APPLY_N%2?'女':'男',age:40+APPLY_N,card:'IKIMP'+id,org:myLines()[0]||'北京建国门',tier:'T2',seg:'企业客户',active:'中活跃',orgType:'集团企业',pkgAmt:0,addonAmt:0,histAddon:1800,visits:1,company:'导入名单 · '+f.name,pos:1,rule:'主动申请',center:'综合健康管理门诊',tel:'132****'+(1000+APPLY_N),source:'apply',appt:null,files:[]});
+  Q.push({id,name:'导入客户'+APPLY_N,sex:APPLY_N%2?'女':'男',age:40+APPLY_N,card:'IKIMP'+id,org:myLines()[0]||'北京建国门',tier:'C级',seg:'企业客户',active:'B级',projSrc:'VIP',orgType:'集团企业',pkgAmt:0,addonAmt:0,histAddon:1800,visits:1,company:'导入名单 · '+f.name,pos:1,rule:'主动申请',center:'综合健康管理门诊',tel:'132****'+(1000+APPLY_N),source:'apply',appt:null,files:[]});
   inp.value='';
   if(scSrc) scSrc.value='apply';
   renderScreen();
@@ -2096,15 +2148,20 @@ const PG_LINES={
   ]
 };
 const OPS_DOCS=[
-  {name:'张明',spec:'内分泌',region:'华北区',org:'北京建国门',read:86,conv:38,actRead:14,actConv:3,items:61,amt:48620,mom:6.1},
-  {name:'刘颖',spec:'全科',region:'华北区',org:'北京建国门',read:74,conv:19,actRead:11,actConv:2,items:24,amt:18240,mom:-2.4},
-  {name:'周宁',spec:'心内',region:'华北区',org:'北京亚运村',read:63,conv:22,actRead:9,actConv:2,items:31,amt:24680,mom:1.2},
-  {name:'陈立',spec:'消化',region:'华东区',org:'上海五角场',read:92,conv:41,actRead:16,actConv:4,items:58,amt:51200,mom:8.4},
-  {name:'林悦',spec:'妇科',region:'华东区',org:'杭州黄龙',read:68,conv:28,actRead:10,actConv:3,items:36,amt:27400,mom:3.1},
-  {name:'赵倩',spec:'全科',region:'华南区',org:'深圳福田',read:71,conv:24,actRead:12,actConv:2,items:33,amt:22150,mom:0.8},
-  {name:'孙磊',spec:'消化',region:'华南区',org:'广州环市东',read:48,conv:9,actRead:8,actConv:1,items:11,amt:7640,mom:-8.1},
-  {name:'王骏',spec:'心内',region:'西南区',org:'成都天府',read:55,conv:12,actRead:7,actConv:1,items:15,amt:9800,mom:-5.6},
-  {name:'何敏',spec:'内分泌',region:'华中区',org:'武汉光谷',read:64,conv:21,actRead:9,actConv:2,items:27,amt:19840,mom:2.2}
+  {name:'张明',role:'解读医生',region:'华北区',org:'北京建国门',read:86,conv:38,actRead:14,actConv:3},
+  {name:'刘颖',role:'解读医生',region:'华北区',org:'北京建国门',read:74,conv:19,actRead:11,actConv:2},
+  {name:'周宁',role:'解读医生',region:'华北区',org:'北京亚运村',read:63,conv:22,actRead:9,actConv:2},
+  {name:'陈立',role:'解读医生',region:'华东区',org:'上海五角场',read:92,conv:41,actRead:16,actConv:4},
+  {name:'林悦',role:'解读医生',region:'华东区',org:'杭州黄龙',read:68,conv:28,actRead:10,actConv:3},
+  {name:'赵倩',role:'解读医生',region:'华南区',org:'深圳福田',read:71,conv:24,actRead:12,actConv:2},
+  {name:'孙磊',role:'解读医生',region:'华南区',org:'广州环市东',read:48,conv:9,actRead:8,actConv:1},
+  {name:'王骏',role:'解读医生',region:'西南区',org:'成都天府',read:55,conv:12,actRead:7,actConv:1},
+  {name:'何敏',role:'解读医生',region:'华中区',org:'武汉光谷',read:64,conv:21,actRead:9,actConv:2},
+  {name:'周洁',role:'健康咨询师',region:'华北区',org:'北京建国门',read:42,conv:11,actRead:18,actConv:5},
+  {name:'吴芳',role:'健康咨询师',region:'华北区',org:'北京亦庄',read:36,conv:8,actRead:15,actConv:3},
+  {name:'陈可',role:'健康咨询师',region:'华东区',org:'上海五角场',read:39,conv:10,actRead:16,actConv:4},
+  {name:'马莉',role:'健康咨询师',region:'华南区',org:'深圳福田',read:28,conv:6,actRead:12,actConv:2},
+  {name:'何兰',role:'健康咨询师',region:'西南区',org:'成都天府',read:22,conv:4,actRead:9,actConv:1}
 ];
 const OPS_MIX={
   '华北区':[{n:'199 复查包',c:48,a:9552},{n:'营养素',c:36,a:13680},{n:'深度筛查包',c:18,a:15840},{n:'门诊管理套餐',c:14,a:41720},{n:'专科转诊（不计转化）',c:9,a:0}],
@@ -2248,7 +2305,7 @@ function onRule(i,key,val){
 function addCohortRule(){
   const row=curTg();
   if(!mineTg(row)||row.st!=='草稿'){toast('仅本区域草稿可新增规则','warn');return;}
-  row.rules.push({field:'活跃客户', val:'高活跃'});
+  row.rules.push({field:'加项活跃度', val:'A级'});
   TG_BUILT='';
   renderTarget();
   renderScreen();
@@ -2319,6 +2376,64 @@ function importTpl(){
   toast('已按模板回填华北区默认圈定规则');
 }
 function downloadTpl(){toast('客群规则模板已下载（模拟）：字段 / 比较符或枚举 / 取值');}
+function zipStore(files){
+  const enc=new TextEncoder();
+  let crcT=null;
+  function crc32(u8){
+    if(!crcT){
+      crcT=new Uint32Array(256);
+      for(let n=0;n<256;n++){ let c=n; for(let k=0;k<8;k++) c=(c&1)?(0xedb88320^(c>>>1)):(c>>>1); crcT[n]=c>>>0; }
+    }
+    let c=0xffffffff;
+    for(let i=0;i<u8.length;i++) c=crcT[(c^u8[i])&255]^(c>>>8);
+    return (c^0xffffffff)>>>0;
+  }
+  const chunks=[], central=[];
+  let offset=0;
+  Object.keys(files).forEach(name=>{
+    const nb=enc.encode(name), db=enc.encode(files[name]), crc=crc32(db);
+    const local=new Uint8Array(30+nb.length);
+    const v=new DataView(local.buffer);
+    v.setUint32(0,0x04034b50,true); v.setUint16(4,20,true);
+    v.setUint32(14,crc,true); v.setUint32(18,db.length,true); v.setUint32(22,db.length,true); v.setUint16(26,nb.length,true);
+    local.set(nb,30);
+    chunks.push(local, db);
+    const cen=new Uint8Array(46+nb.length);
+    const cv=new DataView(cen.buffer);
+    cv.setUint32(0,0x02014b50,true); cv.setUint16(4,20,true); cv.setUint16(6,20,true);
+    cv.setUint32(16,crc,true); cv.setUint32(20,db.length,true); cv.setUint32(24,db.length,true);
+    cv.setUint16(28,nb.length,true); cv.setUint32(42,offset,true);
+    cen.set(nb,46);
+    central.push(cen);
+    offset+=local.length+db.length;
+  });
+  const cenSize=central.reduce((s,c)=>s+c.length,0);
+  const end=new Uint8Array(22);
+  const ev=new DataView(end.buffer);
+  ev.setUint32(0,0x06054b50,true);
+  ev.setUint16(8,central.length,true); ev.setUint16(10,central.length,true);
+  ev.setUint32(12,cenSize,true); ev.setUint32(16,offset,true);
+  return new Blob([...chunks, ...central, end], {type:'application/zip'});
+}
+function downloadApplyTpl(){
+  const headers=['分院','体检号','客户姓名','性别','单位','年龄','客户电话'];
+  const esc=s=>String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;');
+  const cols='ABCDEFG';
+  const sheet=`<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<worksheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main"><sheetData><row r="1">${headers.map((h,i)=>`<c r="${cols[i]}1" t="inlineStr"><is><t>${esc(h)}</t></is></c>`).join('')}</row></sheetData></worksheet>`;
+  const blob=zipStore({
+    '[Content_Types].xml':'<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types"><Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/><Default Extension="xml" ContentType="application/xml"/><Override PartName="/xl/workbook.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet.main+xml"/><Override PartName="/xl/worksheets/sheet1.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.worksheet+xml"/></Types>',
+    '_rels/.rels':'<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" Target="xl/workbook.xml"/></Relationships>',
+    'xl/workbook.xml':'<?xml version="1.0" encoding="UTF-8" standalone="yes"?><workbook xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships"><sheets><sheet name="客户名单" sheetId="1" r:id="rId1"/></sheets></workbook>',
+    'xl/_rels/workbook.xml.rels':'<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/worksheet" Target="worksheets/sheet1.xml"/></Relationships>',
+    'xl/worksheets/sheet1.xml':sheet
+  });
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(blob);
+  a.download='客户名单导入模板.xlsx';
+  document.body.appendChild(a); a.click(); a.remove();
+  setTimeout(()=>URL.revokeObjectURL(a.href),1500);
+}
 function nowStamp(){
   const d=new Date();
   const p=n=>String(n).padStart(2,'0');
@@ -2372,56 +2487,35 @@ function mixOf(region){
 }
 function renderAddon(){
   ensureOps();
-  const region=adRegion.value;
+  if(adOrg.options.length<=1){
+    const orgs=[...new Set(OPS_DOCS.map(d=>d.org))];
+    adOrg.insertAdjacentHTML('beforeend', orgs.map(o=>`<option>${o}</option>`).join(''));
+  }
+  const region=adRegion.value, org=adOrg.value, role=adRole.value;
   const line=Math.max(0,+adLine.value||0);
   const only=adOnly.checked;
-  let docs=OPS_DOCS.filter(d=>!region||d.region===region);
-  const all=docs.slice();
-  docs=docs.filter(d=>!only || (d.read? d.conv/d.read*100:0) < line);
-  docs.sort((a,b)=>(b.read?b.conv/b.read:0)-(a.read?a.conv/a.read:0));
-  const read=all.reduce((a,d)=>a+d.read,0);
-  const conv=all.reduce((a,d)=>a+d.conv,0);
-  const items=all.reduce((a,d)=>a+d.items,0);
-  const amt=all.reduce((a,d)=>a+d.amt,0);
-  adRead.textContent=num(read);
-  adItems.textContent=num(items);
-  adAmt.textContent=yuan(amt);
-  adRate.textContent=read?pct1(conv/read*100):'—';
-  const mix=mixOf(region);
-  const max=Math.max(...mix.map(m=>m.c),1);
-  const period=document.getElementById('tgPeriod');
-  adMixSrc.textContent=(region||'全集团')+' · '+(period?period.value:'2026年10月');
-  adMix.innerHTML=mix.map(m=>`<div class="hrow"><span>${m.n}</span><div class="pbar"><i class="${m.a?'':'mute'}" style="width:${Math.max(m.c/max*100,m.c?4:0)}%"></i></div><em>${m.c} 件${m.a?' · '+yuan(m.a):' · 不计转化'}</em></div>`).join('');
-  adCoach.innerHTML=COACH.length?COACH.map(n=>{
-    const d=OPS_DOCS.find(x=>x.name===n);
-    const rate=d&&d.read?pct1(d.conv/d.read*100):'—';
-    return `<li>${n}${d?' · '+d.region+' · '+d.org+' · B2C '+rate:''}</li>`;
-  }).join(''):'<li>暂无</li>';
-  pageKeep('ad', [region,line,only].join('|'));
+  const docs=OPS_DOCS.filter(d=>{
+    if(d.role!=='健康咨询师'&&d.role!=='解读医生') return false;
+    if(region&&d.region!==region) return false;
+    if(org&&d.org!==org) return false;
+    if(role&&d.role!==role) return false;
+    const rate=d.read?d.conv/d.read*100:0;
+    if(only&&rate>=line) return false;
+    return true;
+  }).sort((a,b)=>(b.read?b.conv/b.read:0)-(a.read?a.conv/a.read:0));
+  pageKeep('ad', [region,org,role,line,only].join('|'));
   const htmls=docs.map(d=>{
     const rate=d.read?d.conv/d.read*100:0;
     const act=d.actRead?d.actConv/d.actRead*100:0;
-    const avg=d.items?Math.round(d.amt/d.items):0;
-    const inList=COACH.includes(d.name);
     return `<tr>
-      <td><b>${d.name}</b></td><td>${d.spec}</td><td>${d.region} / ${d.org}</td>
+      <td><b>${d.name}</b></td><td>${d.role}</td><td>${d.region}</td><td>${d.org}</td>
       <td>${d.read}</td><td>${d.conv}</td>
       <td><b style="color:${rate>=line?'var(--green)':'var(--red)'}">${pct1(rate)}</b></td>
       <td>${d.actRead||0}</td><td>${d.actConv||0}</td><td>${pct1(act)}</td>
-      <td>${d.items}</td><td>${yuan(d.amt)}</td><td>${yuan(avg)}</td>
-      <td style="color:${d.mom>=0?'var(--green)':'var(--red)'}">${d.mom>=0?'+':''}${d.mom.toFixed(1)}%</td>
-      <td>${inList?'<span class="tag gray">已在名单</span>':`<button class="btn ghost sm" onclick="addCoach('${d.name}')">加入辅导</button>`}</td>
     </tr>`;
   });
-  const pg=paintPage('ad', htmls, '<tr><td colspan="14">无匹配医生</td></tr>');
+  const pg=paintPage('ad', htmls, '<tr><td colspan="10">无匹配人员</td></tr>');
   adBody.innerHTML=pg.body; adPager.innerHTML=pg.pager;
-}
-
-
-function addCoach(name){
-  if(!COACH.includes(name)) COACH.push(name);
-  renderAddon();
-  toast(name+' 已加入转化率辅导名单');
 }
 
 /* ---------------- 解读规则配置 ---------------- */
@@ -2456,7 +2550,7 @@ let RULE=[
   {id:"R-02",cond:"25-OH-D < 50 nmol/L",kind:"ind",trigMis:"CHK_25OHD",trigName:"25-OH-D",op:"<",val:"50 nmol/L",mis:"CHK_25OHD",tp:"营养素",item:"维生素 D3 + 镁",url:"https://goods.ikang.com/p/vd3-mg",price:"¥380 / 月",talk:"最佳值 80–120，3 个月复评再调整",scope:"全国",on:true},
   {id:"R-03",cond:"甘油三酯 ≥1.7 或 hsCRP ≥2.0",mis:"CHK_TG_HSCRP",tp:"营养素",item:"Omega-3",url:"https://goods.ikang.com/p/omega3",price:"¥260 / 月",talk:"辅助甘油三酯与低度炎症，不替代药物",scope:"全国",on:true},
   {id:"R-04",cond:"HOMA-IR ≥2.5",kind:"ind",trigMis:"CHK_HOMA",trigName:"HOMA-IR",op:"≥",val:"2.5",mis:"CHK_HOMA",tp:"深度筛查",item:"胰岛素抵抗评估包",url:"https://goods.ikang.com/p/homa-pack",price:"¥880",talk:"OGTT + 胰岛素释放，先看曲线再干预",scope:"全国",on:true},
-  {id:"R-05",cond:"T1 且 代谢主线命中",mis:"PKG_META3M",tp:"门诊套餐",item:"代谢管理 3 个月方案",url:"https://goods.ikang.com/p/meta-3m",price:"¥2,980",talk:"疗程化随访，一次解读讲不完",scope:"华北大区",on:true},
+  {id:"R-05",cond:"A级 且 代谢主线命中",mis:"PKG_META3M",tp:"门诊套餐",item:"代谢管理 3 个月方案",url:"https://goods.ikang.com/p/meta-3m",price:"¥2,980",talk:"疗程化随访，一次解读讲不完",scope:"华北大区",on:true},
   {id:"R-06",cond:"同型半胱氨酸 ≥15",mis:"CHK_HCY",tp:"营养素",item:"叶酸 + B6 + B12",url:"https://goods.ikang.com/p/b-complex",price:"¥260 / 月",talk:"独立危险因素，需与主治用药协同",scope:"全国",on:true},
   {id:"R-07",cond:"肺结节 / 肿瘤倾向 存在",mis:"IMG_NODULE",tp:"转诊（禁推荐）",item:"呼吸 / 肿瘤专科转诊",url:"",price:"—",talk:"不做倾向判断，规范转诊并协助预约",scope:"全国",on:true}
 ];
@@ -2488,17 +2582,25 @@ const RATIO_PTS={
   2:{"F-01":[["2024",2.40],["2025",3.10],["2026",4.86]],"F-02":[["2024",2.20],["2025",2.80],["2026",3.42]]}
 };
 const HIS_APPT=[
-  {id:"S1",branch:"北京建国门",dept:"代谢管理门诊",doc:"张明 · 内分泌",date:"10-20 周二",time:"09:30",room:"建国门 3诊室",left:2},
-  {id:"S2",branch:"北京建国门",dept:"代谢管理门诊",doc:"刘颖 · 全科",date:"10-20 周二",time:"10:15",room:"建国门 1诊室",left:4},
-  {id:"S3",branch:"北京建国门",dept:"代谢管理门诊",doc:"张明 · 内分泌",date:"10-21 周三",time:"14:00",room:"建国门 3诊室",left:3},
-  {id:"S4",branch:"北京建国门",dept:"心脑血管门诊",doc:"周宁 · 心内",date:"10-20 周二",time:"11:00",room:"建国门 5诊室",left:1},
-  {id:"S5",branch:"北京建国门",dept:"内分泌/甲状腺门诊",doc:"张明 · 内分泌",date:"10-22 周四",time:"09:00",room:"建国门 2诊室",left:5},
-  {id:"S6",branch:"北京建国门",dept:"综合健康管理门诊",doc:"刘颖 · 全科",date:"10-22 周四",time:"15:30",room:"建国门 1诊室",left:6},
-  {id:"S7",branch:"北京建国门",dept:"呼吸科门诊",doc:"王磊 · 呼吸",date:"10-23 周五",time:"10:40",room:"建国门 6诊室",left:2},
-  {id:"S8",branch:"北京亦庄",dept:"代谢管理门诊",doc:"陈磊 · 内分泌",date:"10-21 周三",time:"09:00",room:"亦庄 2诊室",left:3},
-  {id:"S9",branch:"北京亦庄",dept:"综合健康管理门诊",doc:"赵敏 · 全科",date:"10-22 周四",time:"10:30",room:"亦庄 1诊室",left:4},
-  {id:"S10",branch:"上海五角场",dept:"心脑血管门诊",doc:"周宁 · 心内",date:"10-21 周三",time:"15:00",room:"五角场 4诊室",left:2},
-  {id:"S11",branch:"上海五角场",dept:"代谢管理门诊",doc:"孙倩 · 内分泌",date:"10-22 周四",time:"09:40",room:"五角场 2诊室",left:5}
+  {id:"S1",branch:"北京建国门",dept:"代谢管理门诊",doc:"张明 · 内分泌",date:"2026-10-21",time:"09:30",room:"建国门 3诊室",left:2},
+  {id:"S3",branch:"北京建国门",dept:"代谢管理门诊",doc:"张明 · 内分泌",date:"2026-10-21",time:"14:00",room:"建国门 3诊室",left:3},
+  {id:"S12",branch:"北京建国门",dept:"代谢管理门诊",doc:"张明 · 内分泌",date:"2026-10-23",time:"09:00",room:"建国门 3诊室",left:1},
+  {id:"S13",branch:"北京建国门",dept:"代谢管理门诊",doc:"张明 · 内分泌",date:"2026-10-28",time:"10:00",room:"建国门 3诊室",left:4},
+  {id:"S14",branch:"北京建国门",dept:"代谢管理门诊",doc:"张明 · 内分泌",date:"2026-11-04",time:"15:30",room:"建国门 3诊室",left:2},
+  {id:"S15",branch:"北京建国门",dept:"代谢管理门诊",doc:"张明 · 内分泌",date:"2026-11-05",time:"09:30",room:"建国门 3诊室",left:2},
+  {id:"S2",branch:"北京建国门",dept:"代谢管理门诊",doc:"刘颖 · 全科",date:"2026-10-22",time:"10:15",room:"建国门 1诊室",left:4},
+  {id:"S16",branch:"北京建国门",dept:"代谢管理门诊",doc:"刘颖 · 全科",date:"2026-10-29",time:"11:00",room:"建国门 1诊室",left:5},
+  {id:"S4",branch:"北京建国门",dept:"心脑血管门诊",doc:"周宁 · 心内",date:"2026-10-22",time:"11:00",room:"建国门 5诊室",left:1},
+  {id:"S17",branch:"北京建国门",dept:"心脑血管门诊",doc:"周宁 · 心内",date:"2026-10-27",time:"15:00",room:"建国门 5诊室",left:2},
+  {id:"S5",branch:"北京建国门",dept:"内分泌/甲状腺门诊",doc:"张明 · 内分泌",date:"2026-10-24",time:"09:00",room:"建国门 2诊室",left:5},
+  {id:"S6",branch:"北京建国门",dept:"综合健康管理门诊",doc:"刘颖 · 全科",date:"2026-10-26",time:"15:30",room:"建国门 1诊室",left:6},
+  {id:"S7",branch:"北京建国门",dept:"呼吸科门诊",doc:"王磊 · 呼吸",date:"2026-10-23",time:"10:40",room:"建国门 6诊室",left:2},
+  {id:"S8",branch:"北京亦庄",dept:"代谢管理门诊",doc:"陈磊 · 内分泌",date:"2026-10-21",time:"09:00",room:"亦庄 2诊室",left:3},
+  {id:"S18",branch:"北京亦庄",dept:"代谢管理门诊",doc:"陈磊 · 内分泌",date:"2026-10-30",time:"14:00",room:"亦庄 2诊室",left:2},
+  {id:"S9",branch:"北京亦庄",dept:"综合健康管理门诊",doc:"赵敏 · 全科",date:"2026-10-22",time:"10:30",room:"亦庄 1诊室",left:4},
+  {id:"S10",branch:"上海五角场",dept:"心脑血管门诊",doc:"周宁 · 心内",date:"2026-10-21",time:"15:00",room:"五角场 4诊室",left:2},
+  {id:"S11",branch:"上海五角场",dept:"代谢管理门诊",doc:"孙倩 · 内分泌",date:"2026-10-22",time:"09:40",room:"五角场 2诊室",left:5},
+  {id:"S19",branch:"上海五角场",dept:"代谢管理门诊",doc:"孙倩 · 内分泌",date:"2026-11-05",time:"09:30",room:"五角场 2诊室",left:3}
 ];
 let editMatchId=null, editRuleId=null, dictEditName=null, editRatioId=null, BOOK_ID=null, BOOK_ITEM="";
 const CFGLOG=[
@@ -2910,13 +3012,61 @@ function saveRatio(){
   mdF.classList.remove('on'); renderRatio();
   if(document.getElementById('p2').classList.contains('on')) renderPreview();
 }
-let BOOK_DEPT="";
+let BOOK_DEPT="", BOOK_PAGE=0, BOOK_DATE=null;
+const BOOK_WK=['星期日','星期一','星期二','星期三','星期四','星期五','星期六'];
+const BOOK_END=15;
+function bookShift(iso, n){
+  const d=new Date(iso+'T00:00:00');
+  d.setDate(d.getDate()+n);
+  const m=String(d.getMonth()+1).padStart(2,'0'), day=String(d.getDate()).padStart(2,'0');
+  return d.getFullYear()+'-'+m+'-'+day;
+}
+function bookWk(iso){ return BOOK_WK[new Date(iso+'T00:00:00').getDay()]; }
+function bookWindow(){
+  const days=[];
+  for(let i=0;i<=BOOK_END;i++) days.push(bookShift(LOGIN_DAY,i));
+  return days;
+}
+function trakPerson(r){
+  const ids={1:'110101197401156042',2:'110101196501083015',3:'310101197901224218',4:'320101197001086026',5:'330101198801152042',6:'510101198201093028',7:'440301199101176015',8:'420101198501224036',9:'110101197701058024',10:'110101198201173019',11:'110101198301246028',12:'110101198001152046'};
+  const y=2026-r.age;
+  return {
+    PAPERName:r.name.slice(0,1),
+    PAPERName2:r.name.slice(1),
+    PAPERName3:r.name,
+    sex:r.sex==='女'?'女 Female':'男 Male',
+    PAPERMobPhone:r.tel,
+    PAPERDob:y+'-01-15',
+    PAPERID:ids[r.id]||('110101'+y+'0115'+String(1000+r.id).slice(-4))
+  };
+}
+function paintBkNew(who){
+  if(who.trakRow){
+    bkNew.innerHTML=`<div class="bknew"><div class="cap">已有门诊就诊记录</div><div style="padding:8px 10px;font-size:12px">患者唯一号 RowID ${who.trakRow}。本次预约不再创建新患者。</div></div>`;
+    return;
+  }
+  const p=trakPerson(who);
+  const rows=[
+    ['姓','PAPERName','Y',p.PAPERName],
+    ['名','PAPERName2','Y',p.PAPERName2],
+    ['中文名','PAPERName3','N',p.PAPERName3],
+    ['性别','CTSEXDesc','Y',p.sex],
+    ['手机号','PAPERMobPhone','N',p.PAPERMobPhone],
+    ['出生日期','PAPERDob','N',p.PAPERDob],
+    ['证件号码','PAPERID','Y',p.PAPERID]
+  ];
+  bkNew.innerHTML=`<div class="bknew"><div class="cap">新客预约 · 门诊无就诊记录。已查询到检客户，创建患者时回传必填项（PAPerson / CreateNew）</div>
+    <table><thead><tr><th>参数名称</th><th>参数代码</th><th>必输</th><th>到检取值</th></tr></thead><tbody>
+    ${rows.map(x=>`<tr><td>${x[0]}</td><td>${x[1]}</td><td class="${x[2]==='Y'?'y':''}">${x[2]}</td><td>${x[3]}</td></tr>`).join('')}
+    </tbody></table></div>`;
+}
 function openBook(item){
-  BOOK_ITEM=item; BOOK_ID=null;
+  BOOK_ITEM=item; BOOK_ID=null; BOOK_DATE=null; BOOK_PAGE=0;
   const who=Q.find(x=>x.id===CUR);
   bkWho.textContent=who.name+' · '+who.card+' · '+who.tel;
   bkItem.textContent=item;
   bkOk.style.display='none'; bkGo.disabled=false;
+  paintBkNew(who);
   const branches=[...new Set(HIS_APPT.map(s=>s.branch))];
   const branch=branches.includes(who.org)?who.org:'北京建国门';
   bkBranch.innerHTML=branches.map(d=>`<option ${d===branch?'selected':''}>${d}</option>`).join('');
@@ -2936,21 +3086,75 @@ function syncBookDoc(){
   syncBookSlots();
 }
 function syncBookSlots(){
-  BOOK_ID=null;
+  BOOK_ID=null; BOOK_DATE=null; BOOK_PAGE=0;
+  renderSlots();
+}
+function currentSlots(){
+  return HIS_APPT.filter(s=>s.branch===bkBranch.value&&s.dept===bkDept.value&&s.doc===bkDoc.value);
+}
+function turnBook(d){
+  const all=bookWindow();
+  const max=Math.ceil(all.length/14)-1;
+  BOOK_PAGE=Math.max(0, Math.min(max, BOOK_PAGE+d));
+  const slice=all.slice(BOOK_PAGE*14, BOOK_PAGE*14+14);
+  if(BOOK_DATE && !slice.includes(BOOK_DATE)) BOOK_DATE=null;
   renderSlots();
 }
 function renderSlots(){
   if(bkSrc) bkSrc.textContent='TrakCare HIS · '+bkBranch.value;
-  const rows=HIS_APPT.filter(s=>s.branch===bkBranch.value&&s.dept===bkDept.value&&s.doc===bkDoc.value);
-  bkSlots.innerHTML=rows.map(s=>`<div class="slot ${BOOK_ID===s.id?'on':''}" onclick="pickSlot('${s.id}')">
-    <div><b>${s.date} ${s.time}</b><div style="font-size:11px;color:var(--muted)">${s.doc} · ${s.room}</div></div>
-    <span class="lm ${s.left?'':'none'}">${s.left?('余 '+s.left):'已满'}</span>
-  </div>`).join('') || '<div class="cc"><div class="d">该医生暂无号源</div></div>';
+  const all=bookWindow();
+  const max=Math.ceil(all.length/14)-1;
+  if(BOOK_PAGE>max) BOOK_PAGE=max;
+  const slice=all.slice(BOOK_PAGE*14, BOOK_PAGE*14+14);
+  const rows=currentSlots();
+  const chosen=HIS_APPT.find(x=>x.id===BOOK_ID);
+  let html=`<div class="calbar"><span class="rng">登录日 ${LOGIN_DAY} 起至 ${bookShift(LOGIN_DAY,BOOK_END)}（+${BOOK_END}日）。默认两行，每行 7 天。</span>
+    <button class="btn or sm" ${BOOK_PAGE<=0?'disabled':''} onclick="turnBook(-1)">前一页</button>
+    <button class="btn or sm" ${BOOK_PAGE>=max?'disabled':''} onclick="turnBook(1)">后一页</button></div>`;
+  html+='<table class="bcal">';
+  for(let r=0;r<2;r++){
+    let days=slice.slice(r*7, r*7+7);
+    if(!days.length) continue;
+    while(days.length<7) days.push('');
+    if(r) html+='<tr class="gap"><td colspan="7"></td></tr>';
+    html+=`<tr>${days.map(d=>d?`<th>${bookWk(d)}</th>`:'<th></th>').join('')}</tr>`;
+    html+=`<tr>${days.map(d=>d?`<th class="sub">${d}</th>`:'<th class="sub"></th>').join('')}</tr>`;
+    html+=`<tr>${days.map(d=>{
+      if(!d) return '<td></td>';
+      const daySlots=rows.filter(s=>s.date===d);
+      const left=daySlots.reduce((n,s)=>n+(s.left||0),0);
+      const on=(BOOK_DATE===d||(chosen&&chosen.date===d))?' on':'';
+      if(!daySlots.length) return '<td class="off">无号</td>';
+      return `<td class="hit${on}" onclick="openBookDay('${d}')"><span class="lm ${left?'':'none'}">${left?('余 '+left):'已满'}</span></td>`;
+    }).join('')}</tr>`;
+  }
+  html+='</table>';
+  if(chosen) html+=`<div style="margin-top:6px;font-size:12px">已选时段：${chosen.date} ${bookWk(chosen.date)} ${chosen.time} · ${chosen.doc} · ${chosen.room}</div>`;
+  bkSlots.innerHTML=html;
+  paintBookPop();
+}
+function openBookDay(iso){
+  const slots=currentSlots().filter(s=>s.date===iso&&s.left);
+  if(!slots.length){toast('该日期号源已满','warn');return;}
+  BOOK_DATE=iso;
+  renderSlots();
+}
+function closeBookDay(){ BOOK_DATE=null; renderSlots(); }
+function paintBookPop(){
+  if(!BOOK_DATE){ bkPop.style.display='none'; return; }
+  const slots=currentSlots().filter(s=>s.date===BOOK_DATE);
+  bkPop.style.display='block';
+  bkPop.innerHTML=`<div class="ph">选择预约时间 · ${BOOK_DATE} ${bookWk(BOOK_DATE)}<button type="button" onclick="closeBookDay()">×</button></div>`
+    +slots.map(s=>`<label class="slot ${BOOK_ID===s.id?'on':''}">
+      <input type="radio" name="bkSlotPick" ${BOOK_ID===s.id?'checked':''} ${s.left?'':'disabled'} onchange="pickSlot('${s.id}')">
+      <div><b>${s.time}</b><div style="font-size:11px;color:var(--muted)">${s.doc} · ${s.room}</div></div>
+      <span class="lm ${s.left?'':'none'}">${s.left?('余 '+s.left):'已满'}</span>
+    </label>`).join('');
 }
 function pickSlot(id){
   const s=HIS_APPT.find(x=>x.id===id);
   if(!s||!s.left){toast('该号源已满','warn');return;}
-  BOOK_ID=id; renderSlots();
+  BOOK_ID=id; BOOK_DATE=s.date; renderSlots();
 }
 function confirmBook(){
   const s=HIS_APPT.find(x=>x.id===BOOK_ID);
@@ -2959,8 +3163,15 @@ function confirmBook(){
   s.left-=1;
   const no='APT'+String(Date.now()).slice(-6);
   const who=Q.find(x=>x.id===CUR);
+  let created='';
+  if(!who.trakRow){
+    const p=trakPerson(who);
+    who.trakRow='RID'+String(Date.now()).slice(-8);
+    created=`<b>新客建档已回传 Trak（PAPerson / CreateNew）</b><br>StatusCode 1（成功）<br>RowID ${who.trakRow}<br>responseMsg 创建成功<br>回传必填：PAPERName ${p.PAPERName}，PAPERName2 ${p.PAPERName2}，CTSEXDesc ${p.sex}，PAPERID ${p.PAPERID}<br><br>`;
+    paintBkNew(who);
+  }
   bkOk.style.display='block';
-  bkOk.innerHTML=`<b>预约成功，已回写 HIS</b><br>预约号 ${no}<br>${who.name} · ${s.branch} · ${s.dept}<br>${s.date} ${s.time} · ${s.doc} · ${s.room}<br>项目：${BOOK_ITEM}`;
+  bkOk.innerHTML=`${created}<b>预约成功，已回写 HIS</b><br>预约号 ${no}<br>${who.name} · ${s.branch} · ${s.dept}<br>${s.date} ${bookWk(s.date)} ${s.time} · ${s.doc} · ${s.room}<br>项目：${BOOK_ITEM}`;
   bkGo.disabled=true;
   renderSlots();
   toast('已为 '+who.name+' 完成门诊预约 '+no);
@@ -3036,6 +3247,12 @@ function savePerm(){
 /* ---------------- init ---------------- */
 fOrg.innerHTML='<option value="">全部权限内检线</option>';
 fillOrgFilter();
+document.querySelectorAll('.tip[data-tip]').forEach(el=>{
+  const pop=document.createElement('span');
+  pop.className='pop';
+  pop.innerHTML=el.dataset.tip==='tier'?TIER_TIP:ACT_TIP;
+  el.appendChild(pop);
+});
 renderScreen(); renderQueue(); initPatients(); renderLogs(); renderCalls();
 ensureOps();
 </script>

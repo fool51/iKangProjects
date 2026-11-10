@@ -528,7 +528,7 @@ p.hint{font-size:11.5px;color:var(--muted);margin:-2px 0 10px}
         </table>
       </div>
       <div id="scPager"></div>
-      <p class="note">分院到检B2C = 预约单中有记录，且命中客户匹配规则，且满足本区域客群字段规则（客群来源、本次到检金额、本次加项金额，以及新增的客户标签）。没有预约单的客户不进入本页。演示中何倩满足字段规则且检线为北京建国门，但预约单没有她，因此不出现。主动申请不看预约单，从名单导入，可在行内上传报告等材料。推送解读时选择日期和整点时段，预约日等于登录日（2026-10-21）的客户才会进入「高客解读列表」。</p>
+      <p class="note">分院到检B2C = 预约单中有记录，且命中客户匹配规则，且满足本区域客群字段规则（客群来源、本次到检金额、本次加项金额，以及新增的客户标签）。没有预约单的客户不进入本页。客户进入该 B2C 池时，向 OMS 发送屏蔽通知。演示中何倩满足字段规则且检线为北京建国门，但预约单没有她，因此不出现。主动申请不看预约单，从名单导入，材料只接受 PDF，可一次多选。推送解读时选择日期和整点时段，预约日等于登录日（2026-10-21）的客户才会进入「高客解读列表」。</p>
     </div>
     <div id="p0Card" style="display:none">
       <div class="toolbar">
@@ -596,6 +596,7 @@ p.hint{font-size:11.5px;color:var(--muted);margin:-2px 0 10px}
       <div class="tabs" style="border:none;margin:0">
         <div class="tab on" data-rpt onclick="switchRpt(this,'ikang')">爱康体检报告</div>
         <div class="tab" data-rpt onclick="switchRpt(this,'3rd')">独立三方报告</div>
+        <div class="tab" data-rpt onclick="switchRpt(this,'up')">客户上传报告</div>
       </div>
       <span style="margin-left:auto"></span>
       <button class="btn ghost sm" onclick="go('p5')">添加解读记录</button>
@@ -616,7 +617,7 @@ p.hint{font-size:11.5px;color:var(--muted);margin:-2px 0 10px}
         <div id="sug3" style="display:none;font-size:12.5px"></div>
       </div>
     </div>
-    <p class="note">「AI综合建议」已并入「AI助手」，进入该模块即展示。本页保留指标判读和历年指标，用标签筛选：选中即展示，再点即隐藏。「独立报告指标」展示从独立报告项目回收的指标。</p>
+    <p class="note">「AI综合建议」已并入「AI助手」，进入该模块即展示。本页保留指标判读和历年指标，用标签筛选：选中即展示，再点即隐藏。「独立报告指标」展示从独立报告项目回收的指标。「客户上传报告」只展示主动申请客户已上传的 PDF。上传入口在「客户筛选与推送」的主动申请名单。</p>
   </div>
 
   <!-- ============ 03 AI 解读 ============ -->
@@ -680,7 +681,7 @@ p.hint{font-size:11.5px;color:var(--muted);margin:-2px 0 10px}
       <span class="tag ok">仅推荐本中心可售项目</span>
       <span class="tag gray">规则来源：解读规则配置 · 推荐规则</span>
       <span style="margin-left:auto"></span>
-      <button class="btn ghost" onclick="toast('推荐清单已同步健康顾问企业微信')">同步健康顾问</button>
+      <button class="btn ghost" onclick="openBook((RECS[CUR]||RECS[1]||[{t:'门诊预约'}])[0].t)">门诊预约</button>
       <button class="btn or" onclick="toast('已在 TrakCare 生成待确认医嘱与 199 复查包订单')">一键写入医嘱</button>
     </div>
     <div class="grid2" id="recWrap"></div>
@@ -784,11 +785,10 @@ p.hint{font-size:11.5px;color:var(--muted);margin:-2px 0 10px}
       <span style="margin-left:auto"></span>
       <button class="btn ghost" id="tgSave" onclick="saveTarget()">保存</button>
       <button class="btn ghost" id="tgSave" onclick="saveTarget()">编辑</button>
-      <button class="btn ghost" id="tgSave" onclick="saveTarget()">推送MIS报告解读屏蔽</button>
 
     </div>
     <div class="seg2" id="tgSegs"></div>
-    <p class="note">健康咨询师推送解读任务之前，圈定范围先取预约单，再套字段规则。默认规则为客群来源、本次到检金额、本次加项金额；可继续新增字段，枚举值来自客户标签（如加项活跃度）。同一字段多条规则按「或」命中，不同字段按「且」同时满足。没有预约单的客户不计入命中。主动申请不在这里配置，也不参与规则圈定。人群提交后仍由区域管理审核，审核通过后推送老系统屏蔽。华北按当前登录检线内、且在预约单中的演示客户实时计算，其他区域为周期快照。</p>
+    <p class="note">健康咨询师推送解读任务之前，圈定范围先取预约单，再套字段规则。默认规则为客群来源、本次到检金额、本次加项金额；可继续新增字段，枚举值来自客户标签（如加项活跃度）。同一字段多条规则按「或」命中，不同字段按「且」同时满足。没有预约单的客户不计入命中。主动申请不在这里配置，也不参与规则圈定。符合圈定范围的客户进入分院到检 B2C 池后，即向 OMS 发送屏蔽通知。华北按当前登录检线内、且在预约单中的演示客户实时计算，其他区域为周期快照。</p>
   </div>
 
   <!-- ============ 11 完成进度 ============ -->
@@ -1648,6 +1648,28 @@ function renderPreview(){
     }
     return;
   }
+  if(RPT==='up'){
+    const people=Q.filter(p=>p.source==='apply');
+    const shown=people.find(p=>p.id===UP_ID);
+    const file=shown&&shown.files[UP_I];
+    if(shown&&file){
+      thirdList.style.display='none'; pdfBody.style.display=''; pdfBar.style.display='flex'; pdfPage.style.display='';
+      pdfName.innerHTML=`<a href="javascript:backUpload()" style="color:#9ec0ff;margin-right:10px;text-decoration:none;font-weight:700">← 返回目录</a>${file} · ${shown.name} · ${shown.card}`;
+      pdfPage.textContent='PDF';
+      pdfBody.innerHTML=`<h3 style="margin:8px 0 12px">客户上传报告</h3><p>文件：${file}</p><p>${shown.name} · ${shown.card} · ${shown.org}</p><p>来源：主动申请</p>`;
+      return;
+    }
+    UP_ID=null;
+    const n=people.reduce((s,p)=>s+p.files.length,0);
+    pdfBody.style.display='none'; pdfBar.style.display='none';
+    thirdList.style.display='block';
+    thirdList.innerHTML=`<div class="th"><b>客户上传报告</b><span>主动申请 ${people.length} 人 · ${n} 份 PDF</span></div>`
+      +(people.length?people.map(p=>{
+        return p.files.length?p.files.map((f,i)=>`<div class="trow" onclick="openUploadPdf(${p.id},${i})"><div class="ico">PDF</div><div class="meta"><b>${f}</b><em>${p.name} · ${p.card} · ${p.org}</em></div><div class="go">打开报告 →</div></div>`).join('')
+          :`<div class="trow wait"><div class="meta"><b>${p.name}</b><em>${p.card} · ${p.org} · 尚未上传</em></div></div>`;
+      }).join(''):`<div class="trow"><div class="meta"><b>暂无主动申请客户</b></div></div>`);
+    return;
+  }
   const list=thirdOf();
   const hit=list.find(x=>x.id===THIRDID);
   if(hit && hit.out===false) THIRDID=null;
@@ -1673,9 +1695,12 @@ function renderPreview(){
 }
 function openThird(id){THIRDID=id; renderPreview();}
 function backThird(){THIRDID=null; renderPreview();}
+let UP_ID=null, UP_I=0;
+function openUploadPdf(id,i){UP_ID=id; UP_I=i; renderPreview();}
+function backUpload(){UP_ID=null; renderPreview();}
 function switchRpt(el,v){
   document.querySelectorAll('[data-rpt]').forEach(x=>x.classList.remove('on'));
-  el.classList.add('on'); RPT=v; THIRDID=null; renderPreview();
+  el.classList.add('on'); RPT=v; THIRDID=null; UP_ID=null; renderPreview();
 }
 function switchSug(el,id){
   document.querySelectorAll('[data-s]').forEach(x=>x.classList.remove('on'));
@@ -1964,6 +1989,20 @@ function screenRows(){
     return !!orderOf(p) && matchRules(p, rules);
   });
 }
+function b2cPool(){
+  const rules=(OPS_TG.find(r=>r.id==='hb')||{rules:[]}).rules;
+  const lines=myLines();
+  return Q.filter(p=>p.source!=='apply' && lines.includes(p.org) && orderOf(p) && matchRules(p, rules));
+}
+const OMS_SHIELD=new Set();
+function syncOmsShield(){
+  const pool=b2cPool();
+  const ids=new Set(pool.map(p=>p.id));
+  const fresh=pool.filter(p=>!OMS_SHIELD.has(p.id));
+  [...OMS_SHIELD].forEach(id=>{ if(!ids.has(id)) OMS_SHIELD.delete(id); });
+  fresh.forEach(p=>OMS_SHIELD.add(p.id));
+  if(fresh.length) toast('已向 OMS 发送屏蔽通知：'+fresh.map(p=>p.name).join('、')+' 进入分院到检 B2C 池');
+}
 function renderScreen(){
   if(!document.getElementById('scBody')) return;
   const rows=screenRows();
@@ -1973,7 +2012,7 @@ function renderScreen(){
     const od=orderOf(r);
     const ap=r.appt?(r.appt.date+' '+r.appt.slot):'<span class="tag gray">未预约</span>';
     const mat=r.source==='apply'
-      ? (r.files.map(f=>`<div style="font-size:11px">${f}</div>`).join(''))+`<label class="btn ghost sm" style="cursor:pointer;margin-top:4px">上传材料<input type="file" accept=".pdf,.jpg,.png,.zip" style="display:none" onchange="uploadMat(${r.id},this)"></label>`
+      ? (r.files.map(f=>`<div style="font-size:11px">${f}</div>`).join(''))+`<label class="btn ghost sm" style="cursor:pointer;margin-top:4px">上传材料<input type="file" accept=".pdf,application/pdf" multiple style="display:none" onchange="uploadMat(${r.id},this)"></label>`
       : '<span style="color:var(--muted)">—</span>';
     return `<tr>
       <td><b>${r.name}</b></td><td>${r.sex} / ${r.age}</td><td>${r.seg}</td><td>${r.org}</td>
@@ -1989,6 +2028,7 @@ function renderScreen(){
   });
   const pg=paintPage('sc', htmls, '<tr><td colspan="12">当前规则和检线下没有客户</td></tr>');
   scBody.innerHTML=pg.body; scPager.innerHTML=pg.pager;
+  syncOmsShield();
 }
 function openCard(id){
   const r=Q.find(x=>x.id===id);
@@ -2015,7 +2055,7 @@ function openCard(id){
   cardAbn.innerHTML=pf.abn.map(t=>`<span class="tag">${t}</span>`).join('');
   const visits=HIST_VISITS[r.id]||[];
   cardVisits.innerHTML=visits.length?visits.map((v,i)=>`<div class="vcard" onclick="openHistVisit(${r.id},${i})"><b>${v.date}</b><span>${v.org} · 阳性 ${v.abn.length} 项</span></div>`).join(''):'<span style="font-size:12px;color:var(--muted)">暂无历史到检阳性报告</span>';
-  cardFiles.innerHTML=r.source!=='apply'?'':`<h3 class="sec">补充材料</h3><div style="font-size:12px;margin-bottom:6px">${r.files.length?r.files.join('、'):'尚未上传'}</div><label class="btn ghost sm" style="cursor:pointer">上传客户报告<input type="file" accept=".pdf,.jpg,.png,.zip" style="display:none" onchange="uploadMat(${r.id},this)"></label>`;
+  cardFiles.innerHTML=r.source!=='apply'?'':`<h3 class="sec">补充材料</h3><div style="font-size:12px;margin-bottom:6px">${r.files.length?r.files.join('、'):'尚未上传。请在客户筛选列表上传 PDF。'}</div>`;
 }
 const HIST_FILT={abn:true,ref:true,best:true,calc:true,indep:true};
 let HIST_CUR=null;
@@ -2049,13 +2089,17 @@ function renderHistBody(){
 }
 function closeCard(){ p0Card.style.display='none'; p0List.style.display=''; renderScreen(); }
 function uploadMat(id, inp){
-  const f=inp.files&&inp.files[0];
-  if(!f) return;
+  const files=[...(inp.files||[])];
+  if(!files.length) return;
+  const bad=files.filter(f=>!/\.pdf$/i.test(f.name));
+  if(bad.length){ toast('只接受 PDF 文件','warn'); inp.value=''; return; }
   const r=Q.find(x=>x.id===id);
-  r.files.push(f.name);
+  if(!r||r.source!=='apply'){ toast('仅主动申请客户可上传报告','warn'); inp.value=''; return; }
+  files.forEach(f=>r.files.push(f.name));
   inp.value='';
-  toast('已上传材料：'+f.name+'。主动申请客源不计入 B2C 转化');
+  toast('已上传 '+files.length+' 份 PDF。主动申请客源不计入 B2C 转化');
   if(p0Card.style.display!=='none') openCard(id); else renderScreen();
+  if(RPT==='up') renderPreview();
 }
 let APPT_ID=null, APPT_SLOT='';
 function openPush(id){
@@ -2335,7 +2379,7 @@ function submitTarget(){
   row.st='待区域审核'; row.op='李倩'; row.at=nowStamp();
   TG_BUILT='';
   renderTarget();
-  toast('已提交区域管理审核。集团不在此确认，审核通过后再推送老系统屏蔽');
+  toast('已提交区域管理审核。集团不在此确认');
 }
 function approveTarget(){
   const row=curTg();
@@ -2344,7 +2388,7 @@ function approveTarget(){
   row.st='区域已审核'; row.op='区域管理'; row.at=nowStamp();
   TG_BUILT='';
   renderTarget();
-  toast('区域管理已审核通过。可推送到分院老报告解读系统，老系统将不再展示这批客户');
+  toast('区域管理已审核通过。符合圈定范围并进入分院到检 B2C 池的客户，已向 OMS 发送屏蔽通知');
 }
 function rejectTarget(){
   const row=curTg();

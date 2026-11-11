@@ -850,7 +850,7 @@ p.hint{font-size:11.5px;color:var(--muted);margin:-2px 0 10px}
       </table>
     </div>
     <div id="adPager"></div>
-    <p class="note">只展示系统角色为健康咨询师、解读医生的人员。B2C 转化率 = B2C 转化人次 ÷ 服务人次。主动申请单独计入主动转化率，不并进 B2C。未达标按 B2C 转化率低于达标线筛选。</p>
+    <p class="note">按医生和角色合并。同一人同时是健康咨询师和解读医生时分成两行。点左侧图标展开该区域内的检线，区域行的服务人次、B2C 转化人次是各检线相加。主动服务、主动转化人次、主动转化率无法对应到检线，只显示在区域行。B2C 转化率 = B2C 转化人次 ÷ 服务人次。未达标按区域行的 B2C 转化率低于达标线筛选。</p>
   </div>
 
   <!-- ============ 解读规则配置（自悬壶配置中心迁入） ============ -->
@@ -1367,24 +1367,50 @@ const REPORTS={
 };
 const THIRD={
  1:[
-  {id:"T1-01",name:"功能医学评估报告",lab:"第三方实验室 · 功能医学加项",date:"2026-09-12",pages:"8 页",tag:"胰岛素抵抗 / 维生素D",
-   inds:[["空腹胰岛素","12.6 mU/L","最佳 <7"],["HOMA-IR","3.58","最佳 <1.5"],["25-OH-D","38 nmol/L","最佳 80–120"],["超敏 CRP","2.9 mg/L","参考 <3.0"]],
+  {id:"T1-01",mis:"FM_ASSESS",name:"功能医学评估报告",lab:"第三方实验室 · 功能医学加项",date:"2026-09-12",pages:"8 页",tag:"胰岛素抵抗 / 维生素D",
+   indicators:[
+     {overallResult:"代谢—炎症—营养主线",overallConclusions:"与体检套餐报告互相印证",indicatorName:"空腹胰岛素",indicatorResultValue:"12.6",indicatorResult:"mU/L",referenceRange:"最佳 <7"},
+     {overallResult:null,overallConclusions:null,indicatorName:"HOMA-IR",indicatorResultValue:"3.58",indicatorResult:null,referenceRange:"最佳 <1.5"},
+     {overallResult:null,overallConclusions:null,indicatorName:"25-OH-D",indicatorResultValue:"38",indicatorResult:"nmol/L",referenceRange:"最佳 80–120"},
+     {overallResult:null,overallConclusions:null,indicatorName:"超敏 CRP",indicatorResultValue:"2.9",indicatorResult:"mg/L",referenceRange:"参考 <3.0"}
+   ],
    pdf:"<h5>功能医学独立报告</h5><p style='font-size:12px;color:#666;text-align:center'>第三方实验室 · 加项　2026-09-12</p><ol><li>空腹胰岛素 12.6 mU/L（最佳 &lt;7）</li><li>HOMA-IR 3.58（最佳 &lt;1.5）</li><li>25-OH-D 38 nmol/L（最佳 80–120）</li><li>超敏 CRP 2.9 mg/L</li></ol><p style='margin-top:14px;font-size:12px'>结论：代谢—炎症—营养主线，与体检套餐报告互相印证。</p>"},
-  {id:"T1-02",name:"慢性食物敏感检测",lab:"第三方实验室 · 免疫加项",date:"2026-09-12",pages:"5 页",tag:"牛奶 / 鸡蛋 中度",
-   inds:[["牛奶蛋白 IgG","中度敏感","独立报告回收"],["鸡蛋蛋白 IgG","中度敏感","独立报告回收"],["小麦 / 大豆 / 坚果","阴性","独立报告回收"]],
+  {id:"T1-02",mis:"IGG_FOOD",name:"慢性食物敏感检测",lab:"第三方实验室 · 免疫加项",date:"2026-09-12",pages:"5 页",tag:"牛奶 / 鸡蛋 中度",
+   indicators:[
+     {overallResult:"牛奶、鸡蛋中度敏感",overallConclusions:"建议 4–6 周轮替回避观察，不建议长期严格忌口",indicatorName:"牛奶蛋白 IgG",indicatorResultValue:null,indicatorResult:"中度敏感",referenceRange:null},
+     {overallResult:null,overallConclusions:null,indicatorName:"鸡蛋蛋白 IgG",indicatorResultValue:null,indicatorResult:"中度敏感",referenceRange:null},
+     {overallResult:null,overallConclusions:null,indicatorName:"小麦 / 大豆 / 坚果",indicatorResultValue:null,indicatorResult:"阴性",referenceRange:null}
+   ],
    pdf:"<h5>慢性食物敏感检测报告</h5><p style='font-size:12px;color:#666;text-align:center'>第三方实验室 · 免疫加项　2026-09-12</p><ol><li>牛奶蛋白 IgG：中度敏感</li><li>鸡蛋蛋白 IgG：中度敏感</li><li>小麦、大豆、坚果：阴性</li></ol><p style='margin-top:14px;font-size:12px'>建议 4–6 周轮替回避观察，不建议长期严格忌口。</p>"},
-  {id:"T1-03",name:"肠道菌群多样性分析",lab:"第三方实验室 · 微生态加项",date:"2026-09-12",pages:"12 页",tag:"多样性偏低",out:false,
-   inds:[["多样性指数","偏低","独立报告回收"],["厚壁菌 / 拟杆菌比值","偏高","独立报告回收"],["产短链脂肪酸菌群","不足","独立报告回收"]],
+  {id:"T1-03",mis:"GUT_DIV",name:"肠道菌群多样性分析",lab:"第三方实验室 · 微生态加项",date:"2026-09-12",pages:"12 页",tag:"多样性偏低",out:false,
+   indicators:[
+     {overallResult:null,overallConclusions:"与胰岛素抵抗、低度炎症可互相印证",indicatorName:"多样性指数",indicatorResultValue:null,indicatorResult:"偏低",referenceRange:null},
+     {overallResult:null,overallConclusions:null,indicatorName:"厚壁菌 / 拟杆菌比值",indicatorResultValue:null,indicatorResult:"偏高",referenceRange:null},
+     {overallResult:null,overallConclusions:null,indicatorName:"产短链脂肪酸菌群",indicatorResultValue:null,indicatorResult:"不足",referenceRange:null}
+   ],
    pdf:"<h5>肠道菌群多样性分析</h5><p style='font-size:12px;color:#666;text-align:center'>第三方实验室 · 微生态加项　2026-09-12</p><ol><li>多样性指数：偏低</li><li>厚壁菌 / 拟杆菌比值：偏高</li><li>产短链脂肪酸菌群：不足</li></ol><p style='margin-top:14px;font-size:12px'>与胰岛素抵抗、低度炎症可互相印证，作为营养干预参考，不作诊断结论。</p>"}
  ],
  2:[
-  {id:"T2-01",name:"功能医学评估报告",lab:"第三方实验室 · 功能医学加项",date:"2026-09-10",pages:"9 页",tag:"胰岛素 / Lp-PLA2 / Hcy",
-   inds:[["Lp-PLA2","268 ng/mL","参考 <200"],["同型半胱氨酸","18.6 μmol/L","参考 <10"],["空腹胰岛素","15.2 mU/L","最佳 <7"]],
+  {id:"T2-01",mis:"FM_ASSESS",name:"功能医学评估报告",lab:"第三方实验室 · 功能医学加项",date:"2026-09-10",pages:"9 页",tag:"胰岛素 / Lp-PLA2 / Hcy",
+   indicators:[
+     {overallResult:"斑块炎症与同型半胱氨酸升高",overallConclusions:"建议与颈动脉超声联合判读",indicatorName:"Lp-PLA2",indicatorResultValue:"268",indicatorResult:"ng/mL",referenceRange:"参考 <200"},
+     {overallResult:null,overallConclusions:null,indicatorName:"同型半胱氨酸",indicatorResultValue:"18.6",indicatorResult:"μmol/L",referenceRange:"参考 <10"},
+     {overallResult:null,overallConclusions:null,indicatorName:"空腹胰岛素",indicatorResultValue:"15.2",indicatorResult:"mU/L",referenceRange:"最佳 <7"}
+   ],
    pdf:"<h5>功能医学独立报告</h5><p style='font-size:12px;color:#666;text-align:center'>第三方实验室 · 加项　2026-09-10</p><ol><li>Lp-PLA2 268 ng/mL（参考 &lt;200）</li><li>同型半胱氨酸 18.6 μmol/L（参考 &lt;10）</li><li>空腹胰岛素 15.2 mU/L（最佳 &lt;7）</li></ol>"},
-  {id:"T2-02",name:"心脑血管风险专项",lab:"第三方实验室 · 心血管加项",date:"2026-09-10",pages:"6 页",tag:"斑块炎症活性",out:false,
-   inds:[["Lp-PLA2","268 ng/mL","斑块炎症活性偏高"],["同型半胱氨酸","18.6 μmol/L","独立危险因素"]],
+  {id:"T2-02",mis:"CVD_RISK",name:"心脑血管风险专项",lab:"第三方实验室 · 心血管加项",date:"2026-09-10",pages:"6 页",tag:"斑块炎症活性",out:false,
+   indicators:[
+     {overallResult:"斑块炎症活性偏高",overallConclusions:null,indicatorName:"Lp-PLA2",indicatorResultValue:"268",indicatorResult:"ng/mL",referenceRange:null},
+     {overallResult:null,overallConclusions:"独立危险因素",indicatorName:"同型半胱氨酸",indicatorResultValue:"18.6",indicatorResult:"μmol/L",referenceRange:null}
+   ],
    pdf:"<h5>心脑血管风险专项报告</h5><p style='font-size:12px;color:#666;text-align:center'>第三方实验室 · 心血管加项　2026-09-10</p><ol><li>Lp-PLA2 268 ng/mL，提示斑块炎症活性偏高</li><li>同型半胱氨酸 18.6 μmol/L，独立危险因素</li><li>建议与颈动脉超声结果联合判读</li></ol><p style='margin-top:14px;font-size:12px'>本报告不替代心血管专科评估。</p>"}
  ]
+};
+const PROJ_BY_MIS={
+  FM_ASSESS:"功能医学评估报告",
+  IGG_FOOD:"慢性食物敏感检测",
+  GUT_DIV:"肠道菌群多样性分析",
+  CVD_RISK:"心脑血管风险专项"
 };
 const RECS={
  1:[
@@ -1628,8 +1654,8 @@ function renderPreview(){
   const bestRows=labs.filter(h=>klassOf(h)==='best');
   tabAbn.textContent='指标判读';
   tabHist.textContent='历年指标';
-  const indep=thirdInds(CUR);
-  sug1.innerHTML=filtBar('judge',[['abn','异常结论'],['ref','超出参考'],['best','非最佳'],['calc','计算指标'],['indep','独立报告指标']])+judgeBlocks(d, refRows, bestRows, extra, indep);
+  const indepOn=FILT.judge.indep;
+  sug1.innerHTML=filtBar('judge',[['abn','异常结论'],['ref','超出参考'],['best','非最佳'],['calc','计算指标'],['indep','独立报告指标']])+judgeBlocks(d, refRows, bestRows, extra, indepOn);
   const charts=[]
     .concat(FILT.hist.ref?refRows:[])
     .concat(FILT.hist.best?bestRows:[])
@@ -1729,10 +1755,38 @@ function labLine(h){
   const last=h.pts[h.pts.length-1][1];
   return `<div class="cc"><div class="k">检验指标</div><div class="t">${h.n}　${last} ${h.u||''}</div><div class="d">常规参考 ${h.ref}　·　功能医学最佳 ${h.best}</div></div>`;
 }
-function thirdInds(pid){
-  return (THIRD[pid]||[]).flatMap(rep=>(rep.inds||[]).map(x=>({name:x[0],val:x[1],note:x[2],from:rep.name})));
+function projName(mis){return PROJ_BY_MIS[mis]||'—';}
+function indepField(label, val){
+  if(val==null||val==='') return '';
+  return `<div class="d">${label}：${val}</div>`;
 }
-function judgeBlocks(d, refRows, bestRows, extra, indep){
+const INDEP_OPEN={};
+function toggleIndep(id){INDEP_OPEN[id]=!INDEP_OPEN[id]; renderPreview();}
+function renderIndep(){
+  const reps=THIRD[CUR]||[];
+  if(!reps.length) return '<div class="cc"><div class="d">暂无独立报告回收指标</div></div>';
+  return reps.map(rep=>{
+    const open=!!INDEP_OPEN[rep.id];
+    const head=`<div class="cc" style="display:flex;align-items:center;justify-content:space-between;gap:8px">
+      <div class="k" style="margin:0;color:var(--blue-dk);font-weight:800">【项目名称：${projName(rep.mis)}】</div>
+      <button type="button" class="pg-tog" onclick="toggleIndep('${rep.id}')" title="${open?'收起':'展开'}">${open?'▾':'▸'}</button>
+    </div>`;
+    if(!open) return head;
+    const body=(rep.indicators||[]).map(ind=>{
+      const lines=[
+        indepField('总体检测结果', ind.overallResult),
+        indepField('总体检测结论', ind.overallConclusions),
+        indepField('指标名称', ind.indicatorName),
+        indepField('指标结果数值结果', ind.indicatorResultValue),
+        indepField('指标结果', ind.indicatorResult),
+        indepField('参考范围', ind.referenceRange)
+      ].join('');
+      return `<div class="cc" style="padding-left:12px">${lines||'<div class="d">无指标字段</div>'}</div>`;
+    }).join('');
+    return head+body;
+  }).join('');
+}
+function judgeBlocks(d, refRows, bestRows, extra, indepOn){
   const parts=[];
   if(FILT.judge.abn){
     parts.push(`<div class="struct-h">异常结论</div>`+(d.abn.length?d.abn.map(a=>`<div class="cc"><div class="k">【${a[0]}】</div><div class="t">${a[1]}</div><div class="d">${a[2]}</div></div>`).join(''):'<div class="cc"><div class="d">无</div></div>'));
@@ -1746,8 +1800,8 @@ function judgeBlocks(d, refRows, bestRows, extra, indep){
   if(FILT.judge.calc){
     parts.push(`<div class="struct-h">计算指标</div>`+(extra.length?extra.map(h=>`<div class="cc"><div class="k">计算指标</div><div class="t">结论：${h.n} 异常　${h.last}</div><div class="d">参考 ${h.ref}　·　最佳 ${h.best}　·　${h.expr}</div></div>`).join(''):'<div class="cc"><div class="d">无异常计算指标</div></div>'));
   }
-  if(FILT.judge.indep){
-    parts.push(`<div class="struct-h">独立报告指标</div>`+(indep.length?indep.map(x=>`<div class="cc"><div class="k">${x.from}</div><div class="t">${x.name}　${x.val}</div><div class="d">${x.note}</div></div>`).join(''):'<div class="cc"><div class="d">暂无独立报告回收指标</div></div>'));
+  if(indepOn){
+    parts.push(`<div class="struct-h">独立报告指标</div>`+renderIndep());
   }
   return parts.length?parts.join(''):'<p style="font-size:12px;color:var(--muted)">未选中数据类型。</p>';
 }
@@ -2192,20 +2246,21 @@ const PG_LINES={
   ]
 };
 const OPS_DOCS=[
-  {name:'张明',role:'解读医生',region:'华北区',org:'北京建国门',read:86,conv:38,actRead:14,actConv:3},
-  {name:'刘颖',role:'解读医生',region:'华北区',org:'北京建国门',read:74,conv:19,actRead:11,actConv:2},
-  {name:'周宁',role:'解读医生',region:'华北区',org:'北京亚运村',read:63,conv:22,actRead:9,actConv:2},
-  {name:'陈立',role:'解读医生',region:'华东区',org:'上海五角场',read:92,conv:41,actRead:16,actConv:4},
-  {name:'林悦',role:'解读医生',region:'华东区',org:'杭州黄龙',read:68,conv:28,actRead:10,actConv:3},
-  {name:'赵倩',role:'解读医生',region:'华南区',org:'深圳福田',read:71,conv:24,actRead:12,actConv:2},
-  {name:'孙磊',role:'解读医生',region:'华南区',org:'广州环市东',read:48,conv:9,actRead:8,actConv:1},
-  {name:'王骏',role:'解读医生',region:'西南区',org:'成都天府',read:55,conv:12,actRead:7,actConv:1},
-  {name:'何敏',role:'解读医生',region:'华中区',org:'武汉光谷',read:64,conv:21,actRead:9,actConv:2},
-  {name:'周洁',role:'健康咨询师',region:'华北区',org:'北京建国门',read:42,conv:11,actRead:18,actConv:5},
-  {name:'吴芳',role:'健康咨询师',region:'华北区',org:'北京亦庄',read:36,conv:8,actRead:15,actConv:3},
-  {name:'陈可',role:'健康咨询师',region:'华东区',org:'上海五角场',read:39,conv:10,actRead:16,actConv:4},
-  {name:'马莉',role:'健康咨询师',region:'华南区',org:'深圳福田',read:28,conv:6,actRead:12,actConv:2},
-  {name:'何兰',role:'健康咨询师',region:'西南区',org:'成都天府',read:22,conv:4,actRead:9,actConv:1}
+  {name:'张明',role:'解读医生',region:'华北区',actRead:14,actConv:3,lines:[{org:'北京建国门',read:56,conv:26},{org:'北京亦庄',read:30,conv:12}]},
+  {name:'张明',role:'健康咨询师',region:'华北区',actRead:12,actConv:4,lines:[{org:'北京建国门',read:24,conv:7},{org:'北京亦庄',read:18,conv:4}]},
+  {name:'刘颖',role:'解读医生',region:'华北区',actRead:11,actConv:2,lines:[{org:'北京建国门',read:48,conv:12},{org:'北京亚运村',read:26,conv:7}]},
+  {name:'周宁',role:'解读医生',region:'华北区',actRead:9,actConv:2,lines:[{org:'北京亚运村',read:63,conv:22}]},
+  {name:'陈立',role:'解读医生',region:'华东区',actRead:16,actConv:4,lines:[{org:'上海五角场',read:92,conv:41}]},
+  {name:'林悦',role:'解读医生',region:'华东区',actRead:10,actConv:3,lines:[{org:'杭州黄龙',read:68,conv:28}]},
+  {name:'赵倩',role:'解读医生',region:'华南区',actRead:12,actConv:2,lines:[{org:'深圳福田',read:71,conv:24}]},
+  {name:'孙磊',role:'解读医生',region:'华南区',actRead:8,actConv:1,lines:[{org:'广州环市东',read:48,conv:9}]},
+  {name:'王骏',role:'解读医生',region:'西南区',actRead:7,actConv:1,lines:[{org:'成都天府',read:55,conv:12}]},
+  {name:'何敏',role:'解读医生',region:'华中区',actRead:9,actConv:2,lines:[{org:'武汉光谷',read:40,conv:14},{org:'长沙芙蓉',read:24,conv:7}]},
+  {name:'周洁',role:'健康咨询师',region:'华北区',actRead:18,actConv:5,lines:[{org:'北京建国门',read:42,conv:11}]},
+  {name:'吴芳',role:'健康咨询师',region:'华北区',actRead:15,actConv:3,lines:[{org:'北京亦庄',read:36,conv:8}]},
+  {name:'陈可',role:'健康咨询师',region:'华东区',actRead:16,actConv:4,lines:[{org:'上海五角场',read:39,conv:10}]},
+  {name:'马莉',role:'健康咨询师',region:'华南区',actRead:12,actConv:2,lines:[{org:'深圳福田',read:28,conv:6}]},
+  {name:'何兰',role:'健康咨询师',region:'西南区',actRead:9,actConv:1,lines:[{org:'成都天府',read:22,conv:4}]}
 ];
 const OPS_MIX={
   '华北区':[{n:'199 复查包',c:48,a:9552},{n:'营养素',c:36,a:13680},{n:'深度筛查包',c:18,a:15840},{n:'门诊管理套餐',c:14,a:41720},{n:'专科转诊（不计转化）',c:9,a:0}],
@@ -2529,34 +2584,54 @@ function mixOf(region){
   }));
   return Object.values(base);
 }
+const AD_OPEN={};
+function adKey(d){return d.name+'|'+d.role+'|'+d.region;}
+function toggleAd(key){
+  AD_OPEN[key]=AD_OPEN[key]===false;
+  renderAddon();
+}
 function renderAddon(){
   ensureOps();
   if(adOrg.options.length<=1){
-    const orgs=[...new Set(OPS_DOCS.map(d=>d.org))];
+    const orgs=[...new Set(OPS_DOCS.flatMap(d=>(d.lines||[]).map(l=>l.org)))];
     adOrg.insertAdjacentHTML('beforeend', orgs.map(o=>`<option>${o}</option>`).join(''));
   }
   const region=adRegion.value, org=adOrg.value, role=adRole.value;
   const line=Math.max(0,+adLine.value||0);
   const only=adOnly.checked;
-  const docs=OPS_DOCS.filter(d=>{
-    if(d.role!=='健康咨询师'&&d.role!=='解读医生') return false;
-    if(region&&d.region!==region) return false;
-    if(org&&d.org!==org) return false;
-    if(role&&d.role!==role) return false;
-    const rate=d.read?d.conv/d.read*100:0;
-    if(only&&rate>=line) return false;
-    return true;
-  }).sort((a,b)=>(b.read?b.conv/b.read:0)-(a.read?a.conv/a.read:0));
+  const groups=OPS_DOCS.map(d=>{
+    if(d.role!=='健康咨询师'&&d.role!=='解读医生') return null;
+    if(region&&d.region!==region) return null;
+    if(role&&d.role!==role) return null;
+    const lines=(d.lines||[]).filter(l=>!org||l.org===org);
+    if(!lines.length) return null;
+    const read=lines.reduce((s,l)=>s+l.read,0);
+    const conv=lines.reduce((s,l)=>s+l.conv,0);
+    const rate=read?conv/read*100:0;
+    if(only&&rate>=line) return null;
+    return Object.assign({}, d, {lines, read, conv, rate});
+  }).filter(Boolean).sort((a,b)=>b.rate-a.rate);
   pageKeep('ad', [region,org,role,line,only].join('|'));
-  const htmls=docs.map(d=>{
-    const rate=d.read?d.conv/d.read*100:0;
+  const htmls=groups.map(d=>{
+    const key=adKey(d);
+    const open=AD_OPEN[key]!==false;
     const act=d.actRead?d.actConv/d.actRead*100:0;
+    const kids=d.lines.map(l=>{
+      const lr=l.read?l.conv/l.read*100:0;
+      return `<tr class="pg-sub" ${open?'':'style="display:none"'}>
+        <td></td><td></td><td></td><td style="padding-left:18px">${l.org}</td>
+        <td>${l.read}</td><td>${l.conv}</td>
+        <td><b style="color:${lr>=line?'var(--green)':'var(--red)'}">${pct1(lr)}</b></td>
+        <td>—</td><td>—</td><td>—</td>
+      </tr>`;
+    }).join('');
     return `<tr>
-      <td><b>${d.name}</b></td><td>${d.role}</td><td>${d.region}</td><td>${d.org}</td>
+      <td><button type="button" class="pg-tog" onclick="toggleAd('${key}')" title="${open?'收起':'展开'}">${open?'▾':'▸'}</button> <b>${d.name}</b></td>
+      <td>${d.role}</td><td>${d.region}</td><td>—</td>
       <td>${d.read}</td><td>${d.conv}</td>
-      <td><b style="color:${rate>=line?'var(--green)':'var(--red)'}">${pct1(rate)}</b></td>
+      <td><b style="color:${d.rate>=line?'var(--green)':'var(--red)'}">${pct1(d.rate)}</b></td>
       <td>${d.actRead||0}</td><td>${d.actConv||0}</td><td>${pct1(act)}</td>
-    </tr>`;
+    </tr>${kids}`;
   });
   const pg=paintPage('ad', htmls, '<tr><td colspan="10">无匹配人员</td></tr>');
   adBody.innerHTML=pg.body; adPager.innerHTML=pg.pager;
